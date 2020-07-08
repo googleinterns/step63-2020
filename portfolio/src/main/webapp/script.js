@@ -1,28 +1,101 @@
-// Copyright 2019 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+var gallery = 1;
+function arrows(){
+  var whichArrow = document.getElementsByTagName("A")[0].getAttribute("class");
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  if(whichArrow == "backArrow"){
+    gallery--;
+  }
+  else{
+    gallery++;
+  }
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+
+  if(gallery == 4){
+    gallery = 1;
+  }
+  if(gallery == 0){
+    gallery = 3;
+  }
+  if(gallery == 1){
+    drawMoodChart();
+    console.log("mood");
+  }
+  if (gallery == 2){
+    drawRelationChart();
+    console.log("relationship");
+  }
+  if(gallery == 3){
+    drawChart();
+    console.log("something");
+  }
+  
+}
+
+function drawMoodChart(value) {
+  var input = value;
+  var data = google.visualization.arrayToDataTable([
+    ['Week', 'Mood'],
+    ['Monday',  1],
+    ['Tuesday',  2],
+    ['Wednesday',  5],
+    ['Thursday',  3],
+    ['Friday',  input]
+  ]);
+
+  var options = {
+    title: 'Mood Progression',
+    curveType: 'function',
+    legend: { position: 'bottom' }
+  };
+
+  var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+  chart.draw(data, options);
+}
+
+function drawRelationChart(value) {
+  var input = value;
+  var data = google.visualization.arrayToDataTable([
+    ['Week', 'Mood'],
+    ['Monday',  1],
+    ['Tuesday',  2],
+    ['Wednesday',  5],
+    ['Thursday',  3],
+    ['Friday',  input]
+  ]);
+
+  var options = {
+    title: 'Relationship Progression',
+    curveType: 'function',
+    legend: { position: 'bottom' }
+  };
+
+  var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+  chart.draw(data, options);
+}
+
+function drawChart(value) {
+  var input = value;
+  var data = google.visualization.arrayToDataTable([
+    ['Week', 'Mood'],
+    ['Monday',  1],
+    ['Tuesday',  2],
+    ['Wednesday',  5],
+    ['Thursday',  3],
+    ['Friday',  input]
+  ]);
+
+  var options = {
+    title: 'Something Progression',
+    curveType: 'function',
+    legend: { position: 'bottom' }
+  };
+
+  var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+  chart.draw(data, options);
 }
