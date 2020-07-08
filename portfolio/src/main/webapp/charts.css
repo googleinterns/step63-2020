@@ -1,0 +1,62 @@
+body{
+    background-image: url("/images/canyon.jpg"); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+}
+
+p{
+    text-align: left;
+    font-weight: bolder;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+    color: #f1f1f1;
+}
+
+.radio{
+    padding: 20px;
+    width: 150px;
+
+  
+}
+
+#options{
+    text-align: center;
+    height: 200px;
+}
+
+label{
+    font-weight: bolder;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: small;
+    text-align: center;
+    color: #f1f1f1;
+    
+}
+
+#curve_chart{
+    display: block;
+    margin: 0 auto;
+    border-style: solid;
+    border-color: #a37c88;
+    border-width: 7px;
+    margin-bottom: 10px;
+}
+
+a{
+    border-radius: 50%;
+    text-decoration: none;
+    background-color: #f1f1f1;
+    color: black;
+    align-content: center;
+    font-size: 35px;
+    padding: 8px 16px;
+
+
+}
+
+a:hover{
+    background-color: #ddd;
+    color: black;
+}
+
