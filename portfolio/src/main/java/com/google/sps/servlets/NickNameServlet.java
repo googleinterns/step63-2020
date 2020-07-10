@@ -58,12 +58,10 @@ public class NickNameServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> emails = new ArrayList<>();
+    // List<String> emails = new ArrayList<>();
     List<String> names = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
-    String userEmail = userService.getCurrentUser().getEmail();
-    emails.add(userEmail);
-    System.out.println(emails);
+
 
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/nickname");
@@ -82,11 +80,11 @@ public class NickNameServlet extends HttpServlet {
     datastore.put(entity);
 
     
-    if(!emails.contains(userEmail) && names.contains(nickname)){
-        out.println("<p>this username is already in use</p>");
-        response.sendRedirect("/nickname");
-        return;
-    }
+    // if(!emails.contains(userEmail) && names.contains(nickname)){
+    //     out.println("<p>this username is already in use</p>");
+    //     response.sendRedirect("/nickname");
+    //     return;
+    // }
 
     response.sendRedirect("/login");
   }
