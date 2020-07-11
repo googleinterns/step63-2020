@@ -28,35 +28,45 @@ public final class Sentence {
   private final String text;
   private final float score;
 
-  public Sentence(String text){
-    this.text = text;
-    this.score = getScore(text);
+  public Sentence(String input){
+    this.text = input;
+    System.out.println("The text is "+text);
+    this.score = calculateScore(text);
+    System.out.println("THE SCORE IS "+score);
 
   }
 
-  public float getScore(String text){
+  private static float calculateScore(String inputText){
+    
+    //Calculates sentiment analysis score
 
     try {
     Document doc =
-        Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
+        Document.newBuilder().setContent(inputText).setType(Document.Type.PLAIN_TEXT).build();
+
     LanguageServiceClient languageService = LanguageServiceClient.create();
+    //This is the problem line
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
     float sentScore = sentiment.getScore();
     languageService.close();
 
     return sentScore;
     } catch(IOException e) {
+    //If the IOException is not added, when the code is run there will be a java IOException "must be caught" error
+    //also I get an error if if there's no return statement
 
-  return -1;
-}
-  
+    return -1;
   }
-  public float score() {
-    return getScore(text);
+
   }
+
 
   public String text() {
     return text;
+  }
+
+  public float score() {
+  return score;
   }
 
 }

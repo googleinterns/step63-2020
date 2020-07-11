@@ -38,66 +38,126 @@ import com.google.appengine.api.datastore.Query;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+// Servlet supports journal feature by retrieving the entry, analyzing it, and storing it in datastore
 @WebServlet("/journal")
 public class JournalServlet extends HttpServlet {
-  
+
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-    System.out.println("The journal input is "+request.getParameter("journal-input"));
-    // Get the input from the form.
-    String input = request.getParameter("journal-input");
-    long inputTime = System.currentTimeMillis();
-    int entrySize = input.length();
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    String[] entryAsStrings = input.split(";|\\.|\\?|\\!");
-    System.out.println("AS STRINGS "+entryAsStrings);
-    List<String> entryBySentence = new ArrayList<String>(Arrays.asList(entryAsStrings)); 
-    System.out.println("AS STRINGS IN LIST "+entryBySentence);
-
-    Collection sentences = new HashSet();
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    int i = 0;
-    int avg = 0;
-    int wtAvg = 0;
-
-    System.out.println(entryBySentence.getClass().getName());
-    System.out.println(entryBySentence.get(i));
-
-    while (i<entryBySentence.size()) {
-        Sentence sentence = new Sentence(entryBySentence.get(i));
-        System.out.println(sentence.text());
-        System.out.println(sentence.score());
-        sentences.add(sentence);
-        i++;
-        avg += sentence.score();
-        wtAvg += sentence.score()*(sentence.text().length()/entrySize);
-    }
-
-    System.out.println("THE SENTENCES "+sentences);
-    System.out.println("WT AVG  "+wtAvg);
-     
-
-    Entity entryEntity = new Entity("Entry");
-    entryEntity.setProperty("content", sentences);
-    entryEntity.setProperty("timestamp", inputTime);
-    entryEntity.setProperty("average-score",avg/(entryBySentence.size()));
-
-    datastore.put(entryEntity);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Query query = new Query("Entry").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
+    List<String> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+
+      comments.add(String.valueOf(entity.getProperty("average-score")));
+
+    }
+
+    String conversion = convertToJsonUsingGson(comments);
+    response.setContentType("application/json");
+    response.getWriter().println(conversion);
+
+  }
+  
+  //Retrieves and stores journal entry from user
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    
+    // Get the input from the form.
+    String input = request.getParameter("journal-input");
+
+    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  "+input);
+
+    //Get time of Entry Submisison
+    long inputTime = System.currentTimeMillis();
+
+    //Find total # of chars in entry
+    int entrySize = input.length();
+
+    //Divide entry into list of strings
+    //TODO: make sure punctuation is included in List
+    String[] entryAsStrings = input.split("\\n|\\.|\\?|\\!");
+    List<String> entryBySentence = new ArrayList<String>(Arrays.asList(entryAsStrings)); 
+
+
+    List<List> sentences = new ArrayList<>();
+    
+    //average score on a sentence by sentence basis
+    float averageScore = 0;
+
+    //weighted average based on sentence length
+    float weightedAverage = 0;
+
+    //Iterates over list of sentences and creates sentence object 
+    for (int i= 0; i < entryBySentence.size(); i++) {
+
+        System.out.println("1111111111111111111111");
+        List<String> sentence = new ArrayList<>();
+        sentence.add(entryBySentence.get(i));
+        System.out.println("22222222222222222222");
+
+        // calculate sentiment analysis score
+        Document doc =
+            Document.newBuilder().setContent(sentence.get(0)).setType(Document.Type.PLAIN_TEXT).build();
+
+        System.out.println("333333333333333333");
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        System.out.println("44444444444444444444");
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        System.out.println("55555555555555555555555");
+        float sentScore = sentiment.getScore();
+        System.out.println("66666666666666666666");
+        languageService.close();
+
+        sentence.add(String.valueOf(sentScore));
+        averageScore += Float.valueOf(sentence.get(1));
+        weightedAverage += Float.valueOf(sentence.get(1))*(sentence.get(0).length()/entrySize);
+
+        sentences.add(sentence);
+    }
+
+    averageScore /= (entryBySentence.size());
+
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    String sentencesInJSON = convertToJsonUsingGsonforSentences(sentences);
+    // Creates entry entity in data store and adds properties
+    Entity entryEntity = new Entity("Entry");
+    entryEntity.setProperty("content", sentencesInJSON);
+    entryEntity.setProperty("timestamp", inputTime);
+    entryEntity.setProperty("average-score",averageScore);
+    entryEntity.setProperty("weighted-average", weightedAverage);
+
+    datastore.put(entryEntity);
+
+    /**
+    //Sorts entry entities by time
+    Query query = new Query("Entry").addSort("timestamp", SortDirection.DESCENDING);
+
+    //Prepares entry entities for searching by properties
+    PreparedQuery results = datastore.prepare(query);
+    */
+    
+
 
     // Redirect back to the HTML page.
-
     response.sendRedirect("/journal.html");
 
   }
 
-    private String convertToJsonUsingGson(List<String> messages) {
+  private String convertToJsonUsingGson(List<String> messages) {
+    Gson gson = new Gson();
+    String json = gson.toJson(messages);
+    return json;
+  }
+
+    private String convertToJsonUsingGsonforSentences(List<List> messages) {
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     return json;
