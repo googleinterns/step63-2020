@@ -71,8 +71,6 @@ public class JournalServlet extends HttpServlet {
     // Get the input from the form.
     String input = request.getParameter("journal-input");
 
-    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  "+input);
-
     //Get time of Entry Submisison
     long inputTime = System.currentTimeMillis();
 
@@ -95,23 +93,15 @@ public class JournalServlet extends HttpServlet {
 
     //Iterates over list of sentences and creates sentence object 
     for (int i= 0; i < entryBySentence.size(); i++) {
-
-        System.out.println("1111111111111111111111");
         List<String> sentence = new ArrayList<>();
         sentence.add(entryBySentence.get(i));
-        System.out.println("22222222222222222222");
 
         // calculate sentiment analysis score
         Document doc =
             Document.newBuilder().setContent(sentence.get(0)).setType(Document.Type.PLAIN_TEXT).build();
-
-        System.out.println("333333333333333333");
         LanguageServiceClient languageService = LanguageServiceClient.create();
-        System.out.println("44444444444444444444");
         Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-        System.out.println("55555555555555555555555");
         float sentScore = sentiment.getScore();
-        System.out.println("66666666666666666666");
         languageService.close();
 
         sentence.add(String.valueOf(sentScore));
@@ -135,16 +125,6 @@ public class JournalServlet extends HttpServlet {
     entryEntity.setProperty("weighted-average", weightedAverage);
 
     datastore.put(entryEntity);
-
-    /**
-    //Sorts entry entities by time
-    Query query = new Query("Entry").addSort("timestamp", SortDirection.DESCENDING);
-
-    //Prepares entry entities for searching by properties
-    PreparedQuery results = datastore.prepare(query);
-    */
-    
-
 
     // Redirect back to the HTML page.
     response.sendRedirect("/journal.html");

@@ -1,9 +1,34 @@
 
+//wk3pt6
+
+//fetches comment array from data servlet and inserts comments into html
 function populateAnalysis() {
   
-  const input = document.getElementById('jornal-input').value;
-  fetch('/journal?jornal-input='+input);
+  document.getElementById("history").innerText = '';
+  
+  const entry = document.getElementById('journal-input').value;
+  fetch('/journal?journal-input='+entry).then(response => response.text()).then((comments) => {
+  comments = comments.replace("[","").replace("]","").split(",");
+  for (i = 0; i<comments.length; i++) {
+
+    const breakElement = document.createElement("br");
+
+    document.getElementById("history").appendChild(createListElement(comments[i]));
+    document.getElementById("history").appendChild(breakElement);
+    document.getElementById("history").appendChild(breakElement);
+
 
   }
 
+  });
 
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+
+window.onload=populateAnalysis;

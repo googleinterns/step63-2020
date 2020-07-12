@@ -16,14 +16,19 @@
   <script src="journal.js"></script>
   <form action="/journal" method="POST">
 
-        <p id = "date" > July 1st, 2020 </p>
+        <p id = "date" > July 7st, 2020 </p>
 
         <!-- journal editing body
         todo: text box needs to cover page and be transparent -->
-
-        <input type ="text" name = "journal-input">
+        <textarea name ="journal-input" id = "journal-input" type="text" rows="10" cols="70">
+        </textarea>
         <input type="submit" />  
 
 </form>
+<ul id="history"></ul>
+<br/>
+<br/>
+<br/>
+<button onclick="populateAnalysis()"> Refresh Analysis </button>
 </body>
 </html>
