@@ -8,27 +8,32 @@
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link rel="stylesheet" href="journal.css">
 
 </head>
 
 <body>
+    <br/>
   <script src="journal.js"></script>
   <form action="/journal" method="POST">
 
-        <p id = "date" > July 7st, 2020 </p>
+        <strong>
+         <span id="time"></span>
+        </strong> 
 
         <!-- journal editing body
         todo: text box needs to cover page and be transparent -->
-        <textarea name ="journal-input" id = "journal-input" type="text" rows="10" cols="70">
+        <div id="textarea">
+        <textarea name ="journal-input" id = "journal-input" type="text" rows="70" cols="60">
         </textarea>
-        <input type="submit" />  
+        <input type="submit" /> 
+        </div> 
 
 </form>
 <ul id="history"></ul>
 <br/>
 <br/>
 <br/>
-<button onclick="populateAnalysis()"> Refresh Analysis </button>
+<button onclick="populateAnalysis()"> See Past Entries </button>
 </body>
 </html>

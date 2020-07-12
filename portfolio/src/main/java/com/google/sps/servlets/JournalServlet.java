@@ -53,7 +53,10 @@ public class JournalServlet extends HttpServlet {
     List<String> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
 
+      comments.add(String.valueOf(entity.getProperty("timestamp")));
+      comments.add(String.valueOf(entity.getProperty("content")));
       comments.add(String.valueOf(entity.getProperty("average-score")));
+      comments.add(String.valueOf(entity.getProperty("weighted-average")));
 
     }
 
@@ -83,7 +86,7 @@ public class JournalServlet extends HttpServlet {
     List<String> entryBySentence = new ArrayList<String>(Arrays.asList(entryAsStrings)); 
 
 
-    List<List> sentences = new ArrayList<>();
+    List<String> sentences = new ArrayList<>();
     
     //average score on a sentence by sentence basis
     float averageScore = 0;
@@ -93,22 +96,20 @@ public class JournalServlet extends HttpServlet {
 
     //Iterates over list of sentences and creates sentence object 
     for (int i= 0; i < entryBySentence.size(); i++) {
-        List<String> sentence = new ArrayList<>();
-        sentence.add(entryBySentence.get(i));
+        //List<String> sentence = new ArrayList<>();
+        sentences.add(entryBySentence.get(i));
 
         // calculate sentiment analysis score
         Document doc =
-            Document.newBuilder().setContent(sentence.get(0)).setType(Document.Type.PLAIN_TEXT).build();
+            Document.newBuilder().setContent(entryBySentence.get(i)).setType(Document.Type.PLAIN_TEXT).build();
         LanguageServiceClient languageService = LanguageServiceClient.create();
         Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
         float sentScore = sentiment.getScore();
         languageService.close();
 
-        sentence.add(String.valueOf(sentScore));
-        averageScore += Float.valueOf(sentence.get(1));
-        weightedAverage += Float.valueOf(sentence.get(1))*(sentence.get(0).length()/entrySize);
-
-        sentences.add(sentence);
+        sentences.add(String.valueOf(sentScore));
+        averageScore += sentScore ;
+        weightedAverage += sentScore*((entryBySentence.get(i).length())/entrySize);
     }
 
     averageScore /= (entryBySentence.size());
@@ -137,7 +138,7 @@ public class JournalServlet extends HttpServlet {
     return json;
   }
 
-    private String convertToJsonUsingGsonforSentences(List<List> messages) {
+    private String convertToJsonUsingGsonforSentences(List<String> messages) {
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     return json;

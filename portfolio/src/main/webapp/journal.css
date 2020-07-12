@@ -1,0 +1,13 @@
+#textarea {
+    text-align:center
+}
+textarea[type="text"]
+{
+    font-size:40px;
+}
+#history {
+    text-align: center
+}
+#time {
+    font-size:30px;
+}

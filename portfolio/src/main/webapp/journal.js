@@ -31,4 +31,9 @@ function createListElement(text) {
   return liElement;
 }
 
+function getDate(){
+    var today = new Date();
+    document.getElementById('time').innerHTML=today;
+}
 window.onload=populateAnalysis;
+window.onload=getDate;
