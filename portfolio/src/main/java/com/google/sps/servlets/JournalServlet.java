@@ -14,6 +14,26 @@
 
 package com.google.sps.servlets;
 
+import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
+import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
+import com.google.cloud.language.v1.AnalyzeEntitySentimentRequest;
+import com.google.cloud.language.v1.AnalyzeEntitySentimentResponse;
+import com.google.cloud.language.v1.AnalyzeSentimentResponse;
+import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
+import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
+import com.google.cloud.language.v1.ClassificationCategory;
+import com.google.cloud.language.v1.ClassifyTextRequest;
+import com.google.cloud.language.v1.ClassifyTextResponse;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.Document.Type;
+import com.google.cloud.language.v1.EncodingType;
+import com.google.cloud.language.v1.EntityMention;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+import com.google.cloud.language.v1.Token;
+import java.util.List;
+import java.util.Map;
+
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -57,6 +77,12 @@ public class JournalServlet extends HttpServlet {
       comments.add(String.valueOf(entity.getProperty("content")));
       comments.add(String.valueOf(entity.getProperty("average-score")));
       comments.add(String.valueOf(entity.getProperty("weighted-average")));
+      comments.add(String.valueOf(entity.getProperty("entity-analysis")));
+      comments.add(String.valueOf(entity.getProperty("entity-names")));
+      comments.add(String.valueOf(entity.getProperty("entity-saliance")));
+      comments.add(String.valueOf(entity.getProperty("entity-key-and-value")));
+      comments.add(String.valueOf(entity.getProperty("entity-content")));
+      comments.add(String.valueOf(entity.getProperty("entity-type")));
 
     }
 
@@ -94,6 +120,8 @@ public class JournalServlet extends HttpServlet {
     //weighted average based on sentence length
     float weightedAverage = 0;
 
+    //TODO: Re-implement Sententence.java now that error is fixed
+
     //Iterates over list of sentences and creates sentence object 
     for (int i= 0; i < entryBySentence.size(); i++) {
         //List<String> sentence = new ArrayList<>();
@@ -114,16 +142,67 @@ public class JournalServlet extends HttpServlet {
 
     averageScore /= (entryBySentence.size());
 
+    List<String> entityNames = new ArrayList<>();
+    List<String> entitySaliance = new ArrayList<>();
+    List<String> entityKeyAndValue = new ArrayList<>();
+    List<String> entityContent = new ArrayList<>();
+    List<String> entityType = new ArrayList<>();
+
+    try (LanguageServiceClient language = LanguageServiceClient.create()) {
+        Document entityDoc = Document.newBuilder().setContent(input).setType(Type.PLAIN_TEXT).build();
+        AnalyzeEntitiesRequest entityRequest =
+            AnalyzeEntitiesRequest.newBuilder()
+                .setDocument(entityDoc)
+                .setEncodingType(EncodingType.UTF16)
+                .build();
+
+        AnalyzeEntitiesResponse EntityResponse = language.analyzeEntities(entityRequest);
+
+        // Print the response
+        for (com.google.cloud.language.v1.Entity entity : EntityResponse.getEntitiesList()) {
+            entityNames.add("Entity: "+entity.getName());
+            entitySaliance.add("Salience: "+entity.getSalience());
+            //entityAnalysis.add("Metadata: ");
+            for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
+            entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
+            }
+            for (EntityMention mention : entity.getMentionsList()) {
+            //entityAnalysis.add("Begin offset: %d\n"+mention.getText().getBeginOffset());
+            entityContent.add("Content: %s\n"+mention.getText().getContent());
+            entityType.add("Type: %s\n\n"+mention.getType());
+            }
+        }
+        }
+
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    String sentencesInJSON = convertToJsonUsingGsonforSentences(sentences);
+    String sentencesInJSON = convertToJsonUsingGsonforLists(sentences);
+    String entityNamesInJSON = convertToJsonUsingGsonforLists(entityNames);
+    String entitySalianceInJSON = convertToJsonUsingGsonforLists(entitySaliance);
+    String entityKeyAndValueInJSON = convertToJsonUsingGsonforLists(entityKeyAndValue);
+    String entityContentInJSON = convertToJsonUsingGsonforLists(entityContent);
+    String entityTypeInJSON = convertToJsonUsingGsonforLists(entityType);
+
     // Creates entry entity in data store and adds properties
     Entity entryEntity = new Entity("Entry");
     entryEntity.setProperty("content", sentencesInJSON);
     entryEntity.setProperty("timestamp", inputTime);
     entryEntity.setProperty("average-score",averageScore);
     entryEntity.setProperty("weighted-average", weightedAverage);
+    entryEntity.setProperty("entity-names", entityNamesInJSON);
+    entryEntity.setProperty("entity-saliance", entitySalianceInJSON);
+    entryEntity.setProperty("entity-key-and-value", entityKeyAndValueInJSON);
+    entryEntity.setProperty("entity-content", entityContentInJSON);
+    entryEntity.setProperty("entity-type", entityTypeInJSON);
+
+
+
+ 
+
+    //TODO: add email/username property
+    //String email = ...
+    //entryEntity.setProperty("email",email)
 
     datastore.put(entryEntity);
 
@@ -138,7 +217,7 @@ public class JournalServlet extends HttpServlet {
     return json;
   }
 
-    private String convertToJsonUsingGsonforSentences(List<String> messages) {
+    private String convertToJsonUsingGsonforLists(List<String> messages) {
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     return json;

@@ -8,7 +8,7 @@ function populateAnalysis() {
   
   const entry = document.getElementById('journal-input').value;
   fetch('/journal?journal-input='+entry).then(response => response.text()).then((comments) => {
-  comments = comments.replace("[","").replace("]","").split(",");
+  comments = comments.replace(/\\[|\\]|"/g,"").split(",")
   for (i = 0; i<comments.length; i++) {
 
     const breakElement = document.createElement("br");
