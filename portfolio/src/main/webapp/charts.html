@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<!-- DO NOT SUBMIT: Fix Page Title. Missing tags? http://go/optional-html -->
-<title>Page Title</title>
+<title>Charts page</title>
 <head>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="charts.css">
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="script.js"></script>
+<script src="charts.js"></script>
 </head>
-    <body onload="drawMoodChart()">
+    <body onload="fillCharts()">
         <p>How are you feeling today?</p>
         <div id="options">
             <label class="radio">
-                <input type="radio" name="rating" value="1" onclick="drawMoodChart(this.value)">
+                <input type="radio" name="Q1" value="1" onclick="addChoice(this.value,this.name)">
                 Bad
             </label>
             
             <label class="radio">
-                <input type="radio" name="rating"  value="2" onclick="drawMoodChart(this.value)">
+                <input type="radio" name="Q1"  value="2" onclick="addChoice(this.value,this.name)">
                 
             </label>
 
             <label class="radio">
-                <input type="radio" name="rating" value="3" onclick="drawMoodChart(this.value)">
+                <input type="radio" name="Q1" value="3" onclick="addChoice(this.value,this.name)">
                 Okay
             </label>
 
             <label class="radio">
-                <input type="radio" name="rating" value="4" onclick="drawMoodChart(this.value)">
+                <input type="radio" name="Q1" value="4" onclick="addChoice(this.value,this.name)">
                 
             </label>
 
             <label class="radio">
-                <input type="radio" name="rating" value="5" onclick="drawMoodChart(this.value)">
+                <input type="radio" name="Q1" value="5" onclick="addChoice(this.value,this.name)">
                 Great
             </label>
 
@@ -40,64 +39,37 @@
 
         <p>How are family and friend relationships?</p>
             <label class="radio">
-                <input type="radio" name="rating2" value="1" onclick="drawRelationChart(this.value)">
+                <input type="radio" name="Q2" value="1" onclick="addChoice(this.value,this.name)">
                 Bad
             </label>
             
             <label class="radio">
-                <input type="radio" name="rating2"  value="2" onclick="drawRelationChart(this.value)">
+                <input type="radio" name="Q2"  value="2" onclick="addChoice(this.value,this.name)">
                 
             </label>
 
             <label class="radio">
-                <input type="radio" name="rating2" value="3" onclick="drawRelationChart(this.value)">
+                <input type="radio" name="Q2" value="3" onclick="addChoice(this.value,this.name)">
                 Okay
             </label>
 
             <label class="radio">
-                <input type="radio" name="rating2" value="4" onclick="drawRelationChart(this.value)">
+                <input type="radio" name="Q2" value="4" onclick="addChoice(this.value,this.name)">
                 
             </label>
 
             <label class="radio">
-                <input type="radio" name="rating2" value="5" onclick="drawRelationChart(this.value)">
+                <input type="radio" name="Q2" value="5" onclick="addChoice(this.value,this.name)">
                 Great
             </label>
 
         <br>
 
-        <p>Another question here?</p>
-            <label class="radio">
-                <input type="radio" name="rating3" value="1" onclick="drawChart(this.value)">
-                Bad
-            </label>
-            
-            <label class="radio">
-                <input type="radio" name="rating3"  value="2" onclick="drawChart(this.value)">
-                
-            </label>
-
-            <label class="radio">
-                <input type="radio" name="rating3" value="3" onclick="drawChart(this.value)">
-                Okay
-            </label>
-
-            <label class="radio">
-                <input type="radio" name="rating3" value="4" onclick="drawChart(this.value)">
-            </label>
-
-            <label class="radio">
-                <input type="radio" name="rating3" value="5" onclick="drawChart(this.value)">
-                Great
-            </label>
         </div>
-        <div style="text-align: right;"><input type="submit">Save</input></div>
+        <div style="text-align: right;"><input type="submit" onclick="fillCharts()"></input></div>
 
       <div id="curve_chart" style="width: 500px; height: 200px"></div>
-
-      <div id="arrows" style="text-align: center;">
-        <a href="#" class="frontArrow" onclick="arrows()">&#8249;</a>
-        <a href="#" class="backArrow" onclick="arrows()">&#8250;</a>
-      </div>  
+      <div id="curve_chart2" style="width: 500px; height: 200px"></div>
+  
     </body>
 </html>
