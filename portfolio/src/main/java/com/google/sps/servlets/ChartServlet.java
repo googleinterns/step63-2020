@@ -110,7 +110,7 @@ public class ChartServlet extends HttpServlet {
                 whichQuestion = previousProperties[2];
 
                 //Does not replace if the entry is from a new day
-                if(whichQuestion.contains(s) && previousProperties[0].contains(storedDate)){
+                if(whichQuestion.contains(propertyName) && previousProperties[0].contains(storedDate)){
                     datastore.delete(oldKey);
                 }
 
