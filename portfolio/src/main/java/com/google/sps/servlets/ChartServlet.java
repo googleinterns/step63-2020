@@ -38,6 +38,12 @@ public class ChartServlet extends HttpServlet {
     Query query = new Query("dayOfWeek");
     PreparedQuery results = datastore.prepare(query);
 
+    if(results.countEntities() == 0){
+        Entity dayOfWeek = new Entity("dayOfWeek");
+        dayOfWeek.setProperty("dayOfWeek", currentDay);
+        datastore.put(dayOfWeek);
+    }
+
     //Gets stored date from datastore
     String storedDate ="";
     for(Entity entity:results.asIterable()){
