@@ -54,19 +54,17 @@ public class ChartServlet extends HttpServlet {
             PreparedQuery newWeekresults = datastore.prepare(newWeekquery);
             Key pastKey = null;
             for(Entity entity:newWeekresults.asIterable()){
-            pastKey = entity.getKey();
-            pastInput.add(pastKey);
+                pastKey = entity.getKey();
+                pastInput.add(pastKey);
             }
-
             datastore.delete(pastInput);
-
         }
 
         //Changes the stored date to the current date
         Key storedDateKey = null;
         try{
             for(Entity entity:results.asIterable()){
-            storedDateKey = entity.getKey();
+                storedDateKey = entity.getKey();
             }
             Entity today = datastore.get(storedDateKey);
             today.setProperty("dayOfWeek", currentDay);
@@ -74,7 +72,7 @@ public class ChartServlet extends HttpServlet {
             datastore.put(today);
         }
         catch(EntityNotFoundException e){
-                System.out.println("Entity not found");
+            System.out.println("Entity not found");
         }
 
         
@@ -102,20 +100,19 @@ public class ChartServlet extends HttpServlet {
     int entityCount = replaceResults.countEntities();
     if(entityCount!= 0){
         try{
-
             String whichQuestion ="";
             String propertyName = (String)request.getParameter("name");
             for(Entity entity:replaceResults.asIterable()){
-            Key oldKey = entity.getKey();
-            Entity oldEntity = datastore.get(oldKey);
-            String data = (String)oldEntity.getProperty("input");
-            String[] previousProperties = data.split(",");
-            whichQuestion = previousProperties[2];
+                Key oldKey = entity.getKey();
+                Entity oldEntity = datastore.get(oldKey);
+                String data = (String)oldEntity.getProperty("input");
+                String[] previousProperties = data.split(",");
+                whichQuestion = previousProperties[2];
 
-            //Does not replace if the entry is from a new day
-            if(whichQuestion.contains(s) && previousProperties[0].contains(storedDate)){
-                datastore.delete(oldKey);
-            }
+                //Does not replace if the entry is from a new day
+                if(whichQuestion.contains(s) && previousProperties[0].contains(storedDate)){
+                    datastore.delete(oldKey);
+                }
 
             }
         }

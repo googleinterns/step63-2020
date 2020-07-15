@@ -85,7 +85,7 @@ function sortArray(arr){
         var day2 = b[0];
         if (daySort[day1] > daySort[day2]){ return 1;}
         if (daySort[day2] > daySort[day1]){return -1;}
-         return 0;
+        return 0;
     })
 
     return arr;
