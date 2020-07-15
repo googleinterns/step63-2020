@@ -196,10 +196,6 @@ public class JournalServlet extends HttpServlet {
     entryEntity.setProperty("entity-content", entityContentInJSON);
     entryEntity.setProperty("entity-type", entityTypeInJSON);
 
-
-
- 
-
     //TODO: add email/username property
     //String email = ...
     //entryEntity.setProperty("email",email)
