@@ -26,6 +26,7 @@
     </dependency>
 
 
+
     <dependency>
      <groupId>com.google.code.gson</groupId>
      <artifactId>gson</artifactId>
@@ -43,6 +44,7 @@
      <artifactId>google-cloud-language</artifactId>
      <version>1.55.0</version>
     </dependency>
+
 
 
 
