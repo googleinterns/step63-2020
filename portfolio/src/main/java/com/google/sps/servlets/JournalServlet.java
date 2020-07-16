@@ -229,11 +229,16 @@ public class JournalServlet extends HttpServlet {
 
     List mostImportant = new ArrayList();
 
-    if (entityNameSalianceAndType.size()<=4) {
+    if (entityNameSalianceAndType.size()== 3 | entityNameSalianceAndType.size()== 4) {
         mostImportant.add(entityNameSalianceAndType.get(0));
         mostImportant.add(entityNameSalianceAndType.get(1));
 
-    } else{
+    } else if (entityNameSalianceAndType.size() <3) {
+        mostImportant.add("nothing");
+        mostImportant.add("0");
+    }
+    
+    else{
         mostImportant.add(entityNameSalianceAndType.get(0));
         mostImportant.add(entityNameSalianceAndType.get(1));
         mostImportant.add(entityNameSalianceAndType.get(2));
@@ -246,20 +251,6 @@ public class JournalServlet extends HttpServlet {
 
     datastore.put(sentenceEntity);
 
-
-    /**
-    // Creates entry entity in data store and adds properties
-    Entity entryEntity = new Entity("Entry");
-    entryEntity.setProperty("content", sentencesInJSON);
-    entryEntity.setProperty("timestamp", inputTime);
-    entryEntity.setProperty("average-score",averageScore);
-    entryEntity.setProperty("weighted-average", weightedAverage);
-    entryEntity.setProperty("entity-names", entityNamesInJSON);
-    entryEntity.setProperty("entity-saliance", entitySalianceInJSON);
-    entryEntity.setProperty("entity-key-and-value", entityKeyAndValueInJSON);
-    entryEntity.setProperty("entity-content", entityContentInJSON);
-    entryEntity.setProperty("entity-type", entityTypeInJSON);
-    **/
 
     // Redirect back to the HTML page.
     response.sendRedirect("/journal.html");
