@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gson.JsonObject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,14 +33,19 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    JsonObject person = new JsonObject();
+    Boolean status;
     response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
+    // PrintWriter out = response.getWriter();
     UserService userService = UserServiceFactory.getUserService();
 
     // If user is not logged in, show a login form (could also redirect to a login page)
     if (!userService.isUserLoggedIn()) {
       String loginUrl = userService.createLoginURL("/login");
-      out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      status = false;
+      person.addProperty("url", loginUrl);
+
+      // out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");  print this out onto the DOM from the js file
       return;
     }
 
@@ -52,10 +58,26 @@ public class LoginServlet extends HttpServlet {
 
     // User is logged in and has a nickname, so the request can proceed
     String logoutUrl = userService.createLogoutURL("/login");
+    status = true;
+    person.addProperty("url", logoutUrl);
+
+    /* 
+    make this section print onto the DOM from the js file
+
     out.println("<h1>Home</h1>");
     out.println("<p>Hello " + nickname + "!</p>");
     out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
     out.println("<p>Change your nickname <a href=\"/nickname\">here</a>.</p>");
+    */
+
+    person.addProperty("status", status);
+    person.addProperty("name", nickname);
+    // person.addProperty("name_url", "/nickname");
+
+
+    response.setContentType("application/json;");
+    String statusJson = new Gson().toJson(person);
+    response.getWriter().println(statusJson);
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
