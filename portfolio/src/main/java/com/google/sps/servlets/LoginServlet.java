@@ -36,7 +36,6 @@ public class LoginServlet extends HttpServlet {
     JsonObject person = new JsonObject();
     Boolean status;
     response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
     UserService userService = UserServiceFactory.getUserService();
 
     // If user is not logged in, show a login form (could also redirect to a login page)
@@ -63,25 +62,14 @@ public class LoginServlet extends HttpServlet {
     status = true;
     person.addProperty("url", logoutUrl);
 
-    // make this section print onto the DOM from the js file
-
-    // out.println("<h1>Home</h1>");
-    // out.println("<p>Hello " + nickname + "!</p>");
-    // out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
-    // out.println("<p>Back to home page <a href=\"/index.html\">here</a>.</p>");
-
-
     person.addProperty("status", status);
     person.addProperty("name", nickname);
     person.addProperty("home", "/index.html");
-
-    System.out.println(person);
 
     response.setContentType("application/json;");
     String statusJson = new Gson().toJson(person);
     response.getWriter().println(statusJson);
 
-    // response.sendRedirect("/index.html");
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
