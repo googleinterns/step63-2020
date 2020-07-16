@@ -13,6 +13,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
 import java.util.Calendar;
 import java.util.Date;
@@ -103,6 +106,12 @@ public class ChartServlet extends HttpServlet {
 
     /*If the user enters a different value on the same day, delete the previous entry and replace
     with new.*/
+    UserService userService = UserServiceFactory.getUserService();
+    User user = userService.getCurrentUser();
+    String userProperty = "";
+    String userEmail = user.getEmail();
+
+
     int entityCount = replaceResults.countEntities();
     if(entityCount!= 0){
         try{
@@ -114,9 +123,12 @@ public class ChartServlet extends HttpServlet {
                 String data = (String)oldEntity.getProperty("input");
                 String[] previousProperties = data.split(",");
                 whichQuestion = previousProperties[2];
+                userProperty =(String)entity.getProperty("User");
 
-                //Does not replace if the entry is from a new day
-                if(whichQuestion.contains(propertyName) && previousProperties[0].contains(storedDate)){
+                //Does not replace if the entry is from a new day and doesn't delete the data of other users.
+                if(whichQuestion.contains(propertyName) && previousProperties[0].contains(storedDate)
+                    && userEmail.equals(userProperty)){
+
                     datastore.delete(oldKey);
                 }
 
@@ -138,6 +150,7 @@ public class ChartServlet extends HttpServlet {
     //Creates entity, sets the properties, adds to datastore
     Entity input = new Entity("input");
     input.setProperty("input", g.toJson(properties));
+    input.setProperty("User", user.getEmail());
     datastore.put(input);
 
   }
