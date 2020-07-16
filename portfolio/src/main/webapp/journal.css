@@ -4,15 +4,22 @@
 textarea[type="text"]
 {
     font-size:40px;
+    background: transparent;
+    color: white;
+    resize: none;
+    border: 0 none;
+    outline: none;
 }
 #history {
     text-align: center
 }
 #time {
     font-size:30px;
+    color: white;
 }
 #prompt {
     font-size:30px;
+    color: white;
 }
 #dark-red {
 
@@ -56,5 +63,10 @@ textarea[type="text"]
   background-color: #1AAB00;
   color: white;
 }
+body {
+ background-image: url("https://pics.freeartbackgrounds.com/fullhd/Forest_Sunlight_Background-954.jpg");
+}
 
-
+li {
+    color: white;
+}
