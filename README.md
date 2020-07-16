@@ -1,13 +1,5 @@
-# Google Student Training in Engineering Program
+# Chiamaka Chukwuka, Erica Smith, and Erys Dennis' Capstone Project
 
-This repo contains the projects you'll work on for the first half of STEP.
-This work is based on the [Google Software Product Sprint](https://g.co/softwareproductsprint) program.
-
-To get started:
-
-- Login to [Google Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor)
-- Clone this repo: `cd; git clone https://github.com/googleinterns/step.git`
-- Open the GitHub setup walkthrough: `teachme ~/step/walkthroughs/week-1-setup/github-setup-walkthrough.md`
-  - If the tutorial panel does not open or display the walkthrough contents, try refreshing the page.
-
-Then follow the on-screen instructions to set up your repo.
+After attending the “Who Do You Build For?” class, my podmates and I were left with the questions “Who do we build for? Who are we intending to help by the end of this?”. We all came to the conclusion that we wanted to help destigmatize the topic of mental health, especially for teens living in communities of color. In those communities, many teens are not comfortable with bringing up the topic of mental health because the adults around them make fun of and belittle the idea of mental health. They invalidate and are blind to the feelings of those around them, leaving them to struggle in silence and create toxic environments.
+	
+The goal of this project is to help guide teens to mental health resources. We hope that teens that do not necessarily have access to trained mental health professionals can use our webapp to gain a bit of relief from the toxicity of their communities. Our goal is not for teens to exclusively use our webapp as a replacement for a therapist because we are by no means mental health professionals. We do not believe that our project will immediately get rid of the stigma of mental health, but we hope that this will help start conversations on how important mental health is for today’s teens.
