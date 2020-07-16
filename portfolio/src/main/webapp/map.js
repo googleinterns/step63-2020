@@ -24,28 +24,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
 var map;
 var service;
 var infowindow;
+var mykey = config.MY_KEY;
 
-// var mykey = config.API_KEY;
+//grabs API key for the Maps/Places/Geocodinng API
+function loadKey(){ 
+  var script  = document.getElementById("scriptAPI"); 
+  script.src  = "https://maps.googleapis.com/maps/api/js?key="+mykey+"&callback=initMap&libraries=places&v=weekly";; 
+  script.type = 'text/javascript'; 
+  script.defer = true;   
+} 
 
-
+//creates the map and turns the user's location into latlng coordinates
 function initMap() {
-  var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
+  var mtnView = new google.maps.LatLng(37.419857, -122.078827);
   var loc;
   var geocoder = new google.maps.Geocoder();
 
   map = new google.maps.Map(document.getElementById('map'), {
-      center: pyrmont,
+      center: mtnView,
       zoom: 15
     });
 
@@ -80,13 +79,13 @@ function callback(results, status) {
   }
 }
 
+//creates the marker with the name and address of the places
 function createMarker(place) {
     var marker = new google.maps.Marker({
       map: map,
       position: place.geometry.location,
       title: place.name
     });
-    console.log("phone: " + place.formatted_phone_number);
 
     var conStr = "<p><b>" + place.name + "</b></p>" + "<p><b>Address: </b>" + place.formatted_address + "</p>";
     var infowindow = new google.maps.InfoWindow({
