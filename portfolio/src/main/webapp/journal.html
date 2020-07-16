@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Journal</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="journal.css">
+
+</head>
+
+<body>
+    <br/>
+    <div id = "nav">
+    <button onclick="location.href = '/login'" id="myButton" class="float-left submit-button" >Login</button>
+      <div id="greeting-container"></div>
+      <p>Click <a href="/journal.html">here</a> to go to the journal.</p>
+      <p>Click <a href="/charts.html">here</a> to go to the mood trackers.</p>
+      <p>Click <a href="/resources.html">here</a> to see the resources page.</p>
+  </div>
+  <br/>
+  <br/>
+  <script src="journal.js"></script>
+  <form action="/journal" method="POST">
+
+        <strong>
+         <span id="time"></span>
+        </strong> 
+        <br/>
+        <br/>
+        <div id="prompt"></div>
+
+        <!-- journal editing body
+        todo: text box needs to cover page and be transparent -->
+        <div id="textarea">
+        <textarea name ="journal-input" id = "journal-input" type="text" rows="60" cols="60">
+        </textarea>
+        <input type="submit" /> 
+        </div> 
+
+</form>
+<ul id="history"></ul>
+<br/>
+<br/>
+<br/>
+<button onclick="populateAnalysis()"> See Past Entries </button>
+</body>
+</html>
