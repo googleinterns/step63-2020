@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.*;
+import com.google.appengine.api.users.UserService;
 import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
 import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
 import com.google.cloud.language.v1.AnalyzeEntitySentimentRequest;
@@ -67,12 +69,26 @@ public class JournalServlet extends HttpServlet {
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Query query = new Query("Entry").addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
+    Query sentenceQuery = new Query("Sentence").addSort("time", SortDirection.DESCENDING);
+    PreparedQuery sentenceResults = datastore.prepare(sentenceQuery);
+
+    long submissionTime;
+
+    
+    if (sentenceResults.countEntities() != 0) {
+
+    submissionTime = Long.valueOf(String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("time")));
+    } else {
+    submissionTime = 0;
+    }
+    
 
     List<String> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-
+    comments.add("NEW ENTRY");
+    comments.add(String.valueOf(entity.getProperty("email"))); 
+    for (Entity entity : sentenceResults.asIterable()) {
+    
+      /**
       comments.add(String.valueOf(entity.getProperty("timestamp")));
       comments.add(String.valueOf(entity.getProperty("content")));
       comments.add(String.valueOf(entity.getProperty("average-score")));
@@ -83,10 +99,21 @@ public class JournalServlet extends HttpServlet {
       comments.add(String.valueOf(entity.getProperty("entity-key-and-value")));
       comments.add(String.valueOf(entity.getProperty("entity-content")));
       comments.add(String.valueOf(entity.getProperty("entity-type")));
+      **/
+
+        
+        if (submissionTime != Long.valueOf(String.valueOf(entity.getProperty("time")))){
+            submissionTime = Long.valueOf(String.valueOf(entity.getProperty("time")));
+            comments.add("NEW ENTRY");
+            comments.add(String.valueOf(entity.getProperty("email"))); 
+        }
+        
+        comments.add(String.valueOf(entity.getProperty("content")));
+        comments.add(String.valueOf(entity.getProperty("sentiment-score"))); 
 
     }
 
-    String conversion = convertToJsonUsingGson(comments);
+    String conversion = convertToJsonUsingGsonforLists(comments);
     response.setContentType("application/json");
     response.getWriter().println(conversion);
 
@@ -110,9 +137,6 @@ public class JournalServlet extends HttpServlet {
     //TODO: make sure punctuation is included in List
     String[] entryAsStrings = input.split("\\n|\\.|\\?|\\!");
     List<String> entryBySentence = new ArrayList<String>(Arrays.asList(entryAsStrings)); 
-
-
-    List<String> sentences = new ArrayList<>();
     
     //average score on a sentence by sentence basis
     float averageScore = 0;
@@ -120,12 +144,17 @@ public class JournalServlet extends HttpServlet {
     //weighted average based on sentence length
     float weightedAverage = 0;
 
-    //TODO: Re-implement Sententence.java now that error is fixed
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    //Creates new Sentence Entity
 
     //Iterates over list of sentences and creates sentence object 
     for (int i= 0; i < entryBySentence.size(); i++) {
-        //List<String> sentence = new ArrayList<>();
-        sentences.add(entryBySentence.get(i));
+
+        Entity sentenceEntity = new Entity("Sentence");
+
+        // Adds sentence string
+        sentenceEntity.setProperty("content",entryBySentence.get(i));
 
         // calculate sentiment analysis score
         Document doc =
@@ -135,12 +164,30 @@ public class JournalServlet extends HttpServlet {
         float sentScore = sentiment.getScore();
         languageService.close();
 
-        sentences.add(String.valueOf(sentScore));
+        //Adds sentiment score for particular sentence
+        sentenceEntity.setProperty("sentiment-score",sentScore);
+
+        //Adds time
+        sentenceEntity.setProperty("time",inputTime);
+
+        //Adds email
+        sentenceEntity.setProperty("email","no email found");
+
+        UserService service =  UserServiceFactory.getUserService();
+        User user = service.getCurrentUser();
+        if (service.isUserLoggedIn()) {
+        sentenceEntity.setProperty("email",user.getEmail());
+        }
+        //Stores sentence
+        datastore.put(sentenceEntity);
+        
         averageScore += sentScore ;
         weightedAverage += sentScore*((entryBySentence.get(i).length())/entrySize);
     }
 
     averageScore /= (entryBySentence.size());
+
+    /**
 
     List<String> entityNames = new ArrayList<>();
     List<String> entitySaliance = new ArrayList<>();
@@ -172,12 +219,10 @@ public class JournalServlet extends HttpServlet {
             entityType.add("Type: %s\n\n"+mention.getType());
             }
         }
-        }
+    }
+    **/
 
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    String sentencesInJSON = convertToJsonUsingGsonforLists(sentences);
+    /**
     String entityNamesInJSON = convertToJsonUsingGsonforLists(entityNames);
     String entitySalianceInJSON = convertToJsonUsingGsonforLists(entitySaliance);
     String entityKeyAndValueInJSON = convertToJsonUsingGsonforLists(entityKeyAndValue);
@@ -195,22 +240,13 @@ public class JournalServlet extends HttpServlet {
     entryEntity.setProperty("entity-key-and-value", entityKeyAndValueInJSON);
     entryEntity.setProperty("entity-content", entityContentInJSON);
     entryEntity.setProperty("entity-type", entityTypeInJSON);
+    **/
 
     //TODO: add email/username property
-    //String email = ...
-    //entryEntity.setProperty("email",email)
-
-    datastore.put(entryEntity);
 
     // Redirect back to the HTML page.
     response.sendRedirect("/journal.html");
 
-  }
-
-  private String convertToJsonUsingGson(List<String> messages) {
-    Gson gson = new Gson();
-    String json = gson.toJson(messages);
-    return json;
   }
 
     private String convertToJsonUsingGsonforLists(List<String> messages) {

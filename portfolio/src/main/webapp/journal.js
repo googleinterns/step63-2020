@@ -13,9 +13,26 @@ function populateAnalysis() {
 
     const breakElement = document.createElement("br");
 
-    document.getElementById("history").appendChild(createListElement(comments[i]));
+    if (comments[i].slice(0,2) != "0." && comments[i].slice(0,3) != "-0." ){
+
+    
+    if (i+1 == comments.length) {
+        const listElement = document.createElement('li');
+        listElement.innerText = comments[i];
+    } else {
+    document.getElementById("history").appendChild(createListElement(comments[i],comments[i+1]));
+    }
+
     document.getElementById("history").appendChild(breakElement);
     document.getElementById("history").appendChild(breakElement);
+    
+    }
+    if (comments[i] = "NEW ENTRY"){
+        document.getElementById("history").appendChild(breakElement);
+        document.getElementById("history").appendChild(breakElement);
+        document.getElementById("history").appendChild(breakElement);
+        document.getElementById("history").appendChild(breakElement);
+    }
 
 
   }
@@ -25,9 +42,27 @@ function populateAnalysis() {
 }
 
 /** Creates an <li> element containing text. */
-function createListElement(text) {
+function createListElement(text , nextElement) {
   const liElement = document.createElement('li');
   liElement.innerText = text;
+  if (nextElement.slice(0,2) == "0." | nextElement.slice(0,3) == "-0." ){
+      var score = parseFloat(nextElement);
+      if (score<-0.7) {
+          liElement.id = "dark-red";
+      } else if (score <-0.25) {
+          liElement.id = "red";
+      } else if (score <0.0) {
+          liElement.id = "yellow";
+      } else if (score == 0.0) {
+          liElement.id = "grey";
+      } else if (score < 0.25) {
+          liElement.id = "light-blue";
+      } else if (score < 0.7) {
+          liElement.id = "light-green";
+      } else if (score > 0.7) {
+          liElement.id = "green";
+      }
+  }
   return liElement;
 }
 
