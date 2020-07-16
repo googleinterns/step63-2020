@@ -28,14 +28,14 @@ public class FillChartServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     String userProperty = "";
-    String userEmail = user.getEmail();
+    String userNickname = user.getNickname();
 
     //Writes properties specific to the current user to /fill-charts to be fetched
     ArrayList<String> allProperties = new ArrayList<>();
     for(Entity entity:results.asIterable()){
         userProperty = (String)entity.getProperty("User");
 
-        if(userService.isUserLoggedIn() && userProperty.equals(userEmail)){
+        if(userService.isUserLoggedIn() && userProperty.equals(userNickname)){
         allProperties.add((String)entity.getProperty("input"));
         }
     }
