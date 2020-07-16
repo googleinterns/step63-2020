@@ -59,7 +59,7 @@ public class NickNameServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // List<String> emails = new ArrayList<>();
-    List<String> names = new ArrayList<>();
+    // List<String> names = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
 
 
@@ -69,7 +69,7 @@ public class NickNameServlet extends HttpServlet {
     }
 
     String nickname = request.getParameter("nickname");
-    System.out.println("names: " + names);
+    // System.out.println("names: " + names);
     String id = userService.getCurrentUser().getUserId();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
