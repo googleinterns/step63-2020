@@ -1,0 +1,72 @@
+#textarea {
+    text-align:center
+}
+textarea[type="text"]
+{
+    font-size:40px;
+    background: transparent;
+    color: white;
+    resize: none;
+    border: 0 none;
+    outline: none;
+}
+#history {
+    text-align: center
+}
+#time {
+    font-size:30px;
+    color: white;
+}
+#prompt {
+    font-size:30px;
+    color: white;
+}
+#dark-red {
+
+  font-size: 25px;
+  background-color: #C70039;
+  color: white;
+}
+#red {
+
+  font-size: 25px;
+  background-color: #E94522;
+  color: white;
+}
+#yellow {
+
+  font-size: 25px;
+  background-color: #FFC300;
+  color: #684F0B;
+}
+#grey {
+
+  font-size: 25px;
+  background-color: #CACACA;
+  color: #4B4B4B;
+}
+#light-blue {
+
+  font-size: 25px;
+  background-color: #B5D9FF;
+  color: #004B9A;
+}
+#light-green {
+
+  font-size: 25px;
+  background-color: #DAF7A6;
+  color: #1B650E;
+}
+#green {
+
+  font-size: 25px;
+  background-color: #1AAB00;
+  color: white;
+}
+body {
+ background-image: url("https://pics.freeartbackgrounds.com/fullhd/Forest_Sunlight_Background-954.jpg");
+}
+
+li {
+    color: white;
+}
