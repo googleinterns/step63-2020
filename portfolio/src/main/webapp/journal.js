@@ -9,23 +9,26 @@ function populateAnalysis() {
   const entry = document.getElementById('journal-input').value;
   fetch('/journal?journal-input='+entry).then(response => response.text()).then((comments) => {
   comments = comments.replace(/\\[|\\]|"/g,"").split(",")
-  for (i = 0; i<comments.length; i++) {
+  for (i = 0; i<comments.length-2; i++) {
 
     const breakElement = document.createElement("br");
 
-    if (comments[i].slice(0,2) != "0." && comments[i].slice(0,3) != "-0." ){
+    if (comments[i].slice(0,2) != "0." && comments[i].slice(0,3) != "-0." && comments[i] != "null"){
 
     
-    if (i+1 == comments.length) {
+    if (i+1 == comments.length-2) {
         const listElement = document.createElement('li');
         listElement.innerText = comments[i];
-    } else {
+    } else if (i<comments.length-2) {
     document.getElementById("history").appendChild(createListElement(comments[i],comments[i+1]));
     }
 
     document.getElementById("history").appendChild(breakElement);
     document.getElementById("history").appendChild(breakElement);
-    
+
+    } else {
+        const prompt = document.getElementById("prompt");
+        prompt.innerText = comments[comments.length-2]+" "+comments[comments.length-1];
     }
     if (comments[i] = "NEW ENTRY"){
         document.getElementById("history").appendChild(breakElement);

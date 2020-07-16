@@ -11,6 +11,9 @@ textarea[type="text"]
 #time {
     font-size:30px;
 }
+#prompt {
+    font-size:30px;
+}
 #dark-red {
 
   font-size: 25px;
