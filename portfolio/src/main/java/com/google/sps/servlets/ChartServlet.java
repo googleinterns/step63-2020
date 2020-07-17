@@ -109,7 +109,7 @@ public class ChartServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     String userProperty = "";
-    String userEmail = user.getEmail();
+    String userNickname = user.getNickname();
 
 
     int entityCount = replaceResults.countEntities();
@@ -127,7 +127,7 @@ public class ChartServlet extends HttpServlet {
 
                 //Does not replace if the entry is from a new day and doesn't delete the data of other users.
                 if(whichQuestion.contains(propertyName) && previousProperties[0].contains(storedDate)
-                    && userEmail.equals(userProperty)){
+                    && userNickname.equals(userProperty)){
 
                     datastore.delete(oldKey);
                 }
@@ -150,7 +150,7 @@ public class ChartServlet extends HttpServlet {
     //Creates entity, sets the properties, adds to datastore
     Entity input = new Entity("input");
     input.setProperty("input", g.toJson(properties));
-    input.setProperty("User", user.getEmail());
+    input.setProperty("User", userNickname);
     datastore.put(input);
 
   }
