@@ -1,5 +1,4 @@
 body{
-  color:white;
   background-image: url('https://i.pinimg.com/originals/d9/de/11/d9de112b2c4aedef6df31d05194adf21.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -7,6 +6,12 @@ body{
 }
 #map {
   height: 500px;
+}
+#resources {
+  color: white;
+}
+#navigation {
+  color: white;
 }
 a{
   color: white;
