@@ -32,7 +32,7 @@ var mykey = config.MY_KEY;
 //grabs API key for the Maps/Places/Geocodinng API
 function loadKey(){ 
   var script  = document.getElementById("scriptAPI"); 
-  script.src  = "https://maps.googleapis.com/maps/api/js?key="+mykey+"&callback=initMap&libraries=places&v=weekly";; 
+  script.src  = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDRlO0WLVtAJohNXYqi_LWOX2GTvwCwkuocallback=initMap&libraries=places&v=weekly";; 
   script.type = 'text/javascript'; 
   script.defer = true;   
 } 
