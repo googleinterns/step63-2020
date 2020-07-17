@@ -1,7 +1,18 @@
 
 google.charts.load('current', {'packages':['corechart']});
 
+const daySort = {
+    "MONDAY":1,
+    "TUESDAY":2,
+    "WEDNESDAY":3,
+    "THURSDAY":4,
+    "FRIDAY":5,
+    "SATURDAY":6,
+    "SUNDAY":7
+};
 
+
+//Draws the chart that tracks the user's mood
 function drawMoodChart(arr) {
   var data = google.visualization.arrayToDataTable(arr);
 
@@ -16,6 +27,7 @@ function drawMoodChart(arr) {
   chart.draw(data, options);
 }
 
+//Draws the chart that tracks the user's friends&family relationships
 function drawRelationChart(arr) {
   var data = google.visualization.arrayToDataTable(arr);
 
@@ -69,15 +81,6 @@ function fillCharts(){
 }
 
 function sortArray(arr){
-    const daySort = {
-        "MONDAY":1,
-        "TUESDAY":2,
-        "WEDNESDAY":3,
-        "THURSDAY":4,
-        "FRIDAY":5,
-        "SATURDAY":6,
-        "SUNDAY":7
-    };
 
     arr.sort(function sortByDay(a,b){
         var day1 = a[0];
