@@ -102,6 +102,10 @@ public class JournalServlet extends HttpServlet {
         comments.add(String.valueOf(entity.getProperty("sentiment-score")));
         }
 
+        if (String.valueOf(entity.getProperty("average-score")) != "null") {
+            comments.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
+            comments.add(String.valueOf(entity.getProperty("average-score")));
+        }
     }
 
     if (String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("subjects")) != "null"){
@@ -149,6 +153,8 @@ public class JournalServlet extends HttpServlet {
     //weighted average based on sentence length
     float weightedAverage = 0;
 
+    float charsIgnored = 0;
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     //Creates new Sentence Entity
@@ -156,6 +162,8 @@ public class JournalServlet extends HttpServlet {
     //Iterates over list of sentences and creates sentence object 
     String email = "";
     for (int i= 0; i < entryBySentence.size(); i++) {
+
+        if (entryBySentence.get(i) != "/r") {
 
         Entity sentenceEntity = new Entity("Sentence");
 
@@ -190,9 +198,18 @@ public class JournalServlet extends HttpServlet {
         
         averageScore += sentScore ;
         weightedAverage += sentScore*((entryBySentence.get(i).length())/entrySize);
+        } else {
+            charsIgnored += 1;
+        }
     }
 
-    averageScore /= (entryBySentence.size());
+    averageScore /= ((entryBySentence.size()-charsIgnored));
+
+    Entity scoreEntity = new Entity("Sentence");
+
+    scoreEntity.setProperty("average-score", averageScore);
+
+    datastore.put(scoreEntity);
 
     
 
@@ -229,11 +246,16 @@ public class JournalServlet extends HttpServlet {
 
     List mostImportant = new ArrayList();
 
-    if (entityNameSalianceAndType.size()<=4) {
+    if (entityNameSalianceAndType.size()== 3 | entityNameSalianceAndType.size()== 4) {
         mostImportant.add(entityNameSalianceAndType.get(0));
         mostImportant.add(entityNameSalianceAndType.get(1));
 
-    } else{
+    } else if (entityNameSalianceAndType.size() <3) {
+        mostImportant.add("nothing");
+        mostImportant.add("0");
+    }
+    
+    else{
         mostImportant.add(entityNameSalianceAndType.get(0));
         mostImportant.add(entityNameSalianceAndType.get(1));
         mostImportant.add(entityNameSalianceAndType.get(2));
@@ -246,21 +268,7 @@ public class JournalServlet extends HttpServlet {
 
     datastore.put(sentenceEntity);
 
-
-    /**
-    // Creates entry entity in data store and adds properties
-    Entity entryEntity = new Entity("Entry");
-    entryEntity.setProperty("content", sentencesInJSON);
-    entryEntity.setProperty("timestamp", inputTime);
-    entryEntity.setProperty("average-score",averageScore);
-    entryEntity.setProperty("weighted-average", weightedAverage);
-    entryEntity.setProperty("entity-names", entityNamesInJSON);
-    entryEntity.setProperty("entity-saliance", entitySalianceInJSON);
-    entryEntity.setProperty("entity-key-and-value", entityKeyAndValueInJSON);
-    entryEntity.setProperty("entity-content", entityContentInJSON);
-    entryEntity.setProperty("entity-type", entityTypeInJSON);
-    **/
-
+ 
     // Redirect back to the HTML page.
     response.sendRedirect("/journal.html");
 

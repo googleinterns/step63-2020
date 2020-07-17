@@ -13,7 +13,7 @@ function populateAnalysis() {
 
     const breakElement = document.createElement("br");
 
-    if (comments[i].slice(0,2) != "0." && comments[i].slice(0,3) != "-0." && comments[i] != "null"){
+    if (comments[i].slice(0,2) != "0." && comments[i].slice(0,3) != "-0." && comments[i] != "null" && comments[i] != "\\r"){
 
     
     if (i+1 == comments.length-2) {
