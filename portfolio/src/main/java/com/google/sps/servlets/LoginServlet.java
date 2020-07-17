@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
     out.println("<h1>Home</h1>");
     out.println("<p>Hello " + nickname + "!</p>");
     out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
-    out.println("<p>Change your nickname <a href=\"/nickname\">here</a>.</p>");
+    out.println("<p><a href=\"/index.html\">Home</a>.</p>");
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
