@@ -64,8 +64,11 @@ textarea[type="text"]
   color: white;
 }
 body {
- background-image: url("https://pics.freeartbackgrounds.com/fullhd/Forest_Sunlight_Background-954.jpg");
-}
+ background-image:url("https://eskipaper.com/images/forest-background-7.jpg");
+ background-repeat: no-repeat;
+ background-size: cover;
+ background-attachment:  fixed;
+ }
 
 li {
     color: white;
