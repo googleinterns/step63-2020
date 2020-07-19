@@ -11,7 +11,8 @@ textarea[type="text"]
     outline: none;
 }
 #history {
-    text-align: center
+    text-align: center;
+    color: white;
 }
 #time {
     font-size:30px;
@@ -69,11 +70,37 @@ body {
  background-size: cover;
  background-attachment:  fixed;
  }
-
-li {
-    color: white;
-}
 #nav {
     font-size: 25px;
     color: white;
 }
+.icon {
+  list-style-type: none;
+  margin: 0;
+  padding-top: 0%;
+  padding: 100;
+  width: 15%;
+  height: 100%; /* Full height */
+  position: fixed; /* Make it stick, even on scroll */
+  overflow: auto; /* Enable scrolling if the sidenav has too much content */
+  right: 0;
+  font-size: 100px;
+  text-decoration: none;
+}
+.lorem-logo {
+  list-style-type: none;
+  margin: 0;
+  padding-top: 0%;
+  padding: 100;
+  width: 10%;
+  font-size: 110px;
+  color: white;
+  height: 100%; /* Full height */
+  position: fixed; /* Make it stick, even on scroll */
+  overflow: auto; /* Enable scrolling if the sidenav has too much content */
+  left: 0;
+  font-family: 'Poiret One', cursive;
+}
+ a:link {
+    text-decoration: none;
+ }

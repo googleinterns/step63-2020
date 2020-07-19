@@ -10,7 +10,7 @@
 .icon {
   list-style-type: none;
   margin: 0;
-  padding-top: 10%;
+  padding-top: 0%;
   padding: 100;
   width: 15%;
   height: 100%; /* Full height */
@@ -26,7 +26,7 @@
   padding-top: 0%;
   padding: 100;
   width: 10%;
-  font-size: 150px;
+  font-size: 110px;
   color: white;
   height: 100%; /* Full height */
   position: fixed; /* Make it stick, even on scroll */
@@ -35,7 +35,7 @@
   font-family: 'Poiret One', cursive;
 }
 body {
- background-image:url("./images/homepage.png");
+ /*background-image:url("./images/homepage.png");*/
  background-repeat: no-repeat;
  background-size: cover;
  background-attachment:  fixed;

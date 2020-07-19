@@ -10,13 +10,12 @@
   <body>
     <br/>
     <br/>
-    <br/>
-    <br/>
     <ul class="icon" >
     <li><a class="long-icon"  href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
     <li><a  href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a></li>
     <li><a  href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
     <li><a  href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a></li>
+    <li><a  href="/index.html">&nbsp;&nbsp;<img src="./images/homeicon.png" height="150" width="120"></a></li>
     </ul>
 
     <ul class="lorem-logo">
@@ -26,7 +25,9 @@
     <li>&ensp;E</li>
     <li>&nbsp;M</li>
     </ul>
-    
+    <!-- TODO: Make a description box of feature appear when 
+               user hovers over navigation link. enter. scribe. track. discover. begin.         -->
+     
     <div id="content">
       <!---
       <h1>Welcome to Lorem!</h1>
@@ -40,5 +41,28 @@
       <p>Click <a href="/charts.html">here</a> to go to the mood trackers.</p>
       <p>Click <a href="/resources.html">here</a> to see the resources page.</p>
       -->
+          <script>
+        var currentTime = new Date().getHours();
+        if (currentTime <= 5 | currentTime>20) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://4.bp.blogspot.com/-vEBoI0UVq5I/XxOltUqiyQI/AAAAAAAAAm8/Vci6MSP-Cw8DGvMsmQCPYkoH_J-tykfQwCLcBGAsYHQ/s1600/nigh.png')";
+            }
+        }
+        else if (currentTime <= 12 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/2-cathedral-cove-beach-near-hahei-philip-bird.jpg')";
+            }
+        }
+        else if (currentTime <= 16 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('./images/homepage.png')";
+            }
+        }
+        else if (currentTime <= 20 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('./images/homeevening.png')";
+            }
+        }
+    </script>
   </body>
 </html>

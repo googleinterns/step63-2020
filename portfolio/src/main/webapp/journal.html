@@ -9,10 +9,11 @@
   <meta name="author" content="SitePoint">
 
   <link rel="stylesheet" href="journal.css">
-
+  <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <!--
     <br/>
     <div id = "nav">
     <button onclick="location.href = '/login.html'" id="myButton" class="float-left submit-button" >Login</button>
@@ -22,7 +23,25 @@
   </div>
   <br/>
   <br/>
+  -->
   <script src="journal.js"></script>
+  <br/>
+    <br/>
+    <ul class="icon" >
+    <li><a class="long-icon"  href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+    <li><a  href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a></li>
+    <li><a  href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
+    <li><a  href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a></li>
+    <li><a  href="/index.html">&nbsp;&nbsp;<img src="./images/homeicon.png" height="150" width="120"></a></li>
+    </ul>
+
+    <ul class="lorem-logo">
+    <li>&ensp;L</li>
+    <li>&nbsp;O</li>
+    <li>&ensp;R</li>
+    <li>&ensp;E</li>
+    <li>&nbsp;M</li>
+    </ul>
   <form action="/journal" method="POST">
 
         <strong>
@@ -31,11 +50,8 @@
         <br/>
         <br/>
         <div id="prompt"></div>
-
-        <!-- journal editing body
-        todo: text box needs to cover page and be transparent -->
         <div id="textarea">
-        <textarea name ="journal-input" id = "journal-input" type="text" rows="60" cols="60">
+        <textarea name ="journal-input" id = "journal-input" type="text" rows="40" cols="40">
         </textarea>
         <input type="submit" /> 
         </div> 
