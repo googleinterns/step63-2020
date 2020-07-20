@@ -1,5 +1,5 @@
 #textarea {
-    text-align:center
+    text-align:center;
 }
 textarea[type="text"]
 {
@@ -7,7 +7,8 @@ textarea[type="text"]
     background: transparent;
     color: white;
     resize: none;
-    border: 0 none;
+    border: dashed 2px white;
+    border-color: white;
     outline: none;
 }
 #history {
@@ -15,8 +16,9 @@ textarea[type="text"]
     color: white;
 }
 #time {
-    font-size:30px;
+    font-size:60px;
     color: white;
+    font-family: 'Cormorant Garamond', serif;
 }
 #prompt {
     font-size:30px;
@@ -103,4 +105,7 @@ body {
 }
  a:link {
     text-decoration: none;
+ }
+ #history-button{
+ padding-left: 15%;
  }

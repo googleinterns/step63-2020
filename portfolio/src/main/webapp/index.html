@@ -26,22 +26,16 @@
     <li>&nbsp;M</li>
     </ul>
     <!-- TODO: Make a description box of feature appear when 
-               user hovers over navigation link. enter. scribe. track. discover. begin.         -->
+               user hovers over navigation link. enter. scribe. track. discover. begin.-->
+    <!-- TODO: Change icon images to "icon-selected" images on hover-->
+    <!--TODO: move buttons/text between margins so that functionality is accessible -->
+
      
     <div id="content">
-      <!---
-      <h1>Welcome to Lorem!</h1>
-      <p>Login here.</p>
-      -->
       <button onclick="revealLogin()" id="myButton" class="float-left submit-button" >Login</button>
       <div id="greeting-container"></div>
-      <!--
-      <p>Click <a href="/login">here</a> here to login.</p>
-      <p>Click <a href="/journal.html">here</a> to go to the journal.</p>
-      <p>Click <a href="/charts.html">here</a> to go to the mood trackers.</p>
-      <p>Click <a href="/resources.html">here</a> to see the resources page.</p>
-      -->
-          <script>
+
+    <script>
         var currentTime = new Date().getHours();
         if (currentTime <= 5 | currentTime>20) {
             if (document.body) {
@@ -64,5 +58,5 @@
             }
         }
     </script>
-  </body>
+</body>
 </html>

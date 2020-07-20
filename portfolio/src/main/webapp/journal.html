@@ -1,66 +1,87 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
-  <meta charset="utf-8">
+	<meta charset="utf-8">
 
-  <title>Journal</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
+	<title>Journal</title>
+	<meta name="description" content="The HTML5 Herald">
+	<meta name="author" content="SitePoint">
 
-  <link rel="stylesheet" href="journal.css">
-  <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="journal.css">
+	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!--
-    <br/>
-    <div id = "nav">
-    <button onclick="location.href = '/login.html'" id="myButton" class="float-left submit-button" >Login</button>
-      <button onclick="location.href ='/journal.html'">Journal</button>
-      <button onclick="location.href ='/charts.html'">Charts</button>
-      <button onclick="location.href ='/resources.html'">Resources</button>
-  </div>
-  <br/>
-  <br/>
-  -->
-  <script src="journal.js"></script>
-  <br/>
-    <br/>
-    <ul class="icon" >
-    <li><a class="long-icon"  href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
-    <li><a  href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a></li>
-    <li><a  href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
-    <li><a  href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a></li>
-    <li><a  href="/index.html">&nbsp;&nbsp;<img src="./images/homeicon.png" height="150" width="120"></a></li>
-    </ul>
+	<script>
+		var currentTime = new Date().getHours();
+        if (currentTime <= 5 | currentTime>20) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://images-na.ssl-images-amazon.com/images/I/81uAEOybIFL._AC_SL1500_.jpg')";
+            }
+        }
+        else if (currentTime <= 12 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://eskipaper.com/images/forest-background-7.jpg')";
+            }
+        }
+        else if (currentTime <= 16 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://cdn.pixabay.com/photo/2015/12/01/20/28/fall-1072821_960_720.jpg')";
+            }
+        }
+        else if (currentTime <= 20 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/1016254432/thumb/1.jpg')";
+            }
+        }
+	</script>
+	<script src="journal.js"></script>
+	<br/>
+	<br/>
+	<ul class="icon">
+		<li><a class="long-icon" href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+		<li><a href="/journal.html">&nbsp;&nbsp;<img src="./images/journal-selected.png" height="120" width="120"></a></li>
+		<li><a href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
+		<li><a href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a>
+		</li>
+		<li><a href="/index.html">&nbsp;&nbsp;<img src="./images/homeicon.png" height="150" width="120"></a></li>
+	</ul>
 
-    <ul class="lorem-logo">
-    <li>&ensp;L</li>
-    <li>&nbsp;O</li>
-    <li>&ensp;R</li>
-    <li>&ensp;E</li>
-    <li>&nbsp;M</li>
-    </ul>
-  <form action="/journal" method="POST">
+	<ul class="lorem-logo">
+		<li>&ensp;L</li>
+		<li>&nbsp;O</li>
+		<li>&ensp;R</li>
+		<li>&ensp;E</li>
+		<li>&nbsp;M</li>
+	</ul>
+    <!-- TODO: Add sound options ambient noises, affirmations, music -->
+	<form action="/journal" method="POST">
 
-        <strong>
-         <span id="time"></span>
-        </strong> 
-        <br/>
-        <br/>
-        <div id="prompt"></div>
-        <div id="textarea">
-        <textarea name ="journal-input" id = "journal-input" type="text" rows="40" cols="40">
+
+		<span id="time"></span>
+
+		<br/>
+		<br/>
+		<div id="prompt"></div>
+		<div id="textarea">
+			<textarea name ="journal-input" id = "journal-input" type="text" rows="11" cols="40">
         </textarea>
-        <input type="submit" /> 
-        </div> 
+			<input type="image" src="./images/submiticon.png" alt="submit" height="50" width="80"/>
+        </div>
 
-</form>
-<ul id="history"></ul>
-<br/>
-<br/>
-<br/>
-<button onclick="populateAnalysis()"> See Past Entries </button>
+	</form>
+    <ul class ="noise">
+        <li><img src="./images/loginicon.png" height="50" width="50"></li>
+        <li><img src="./images/loginicon.png" height="50" width="50"></li>
+        <li><img src="./images/loginicon.png" height="50" width="50"></li>
+    <ul>
+	<br/>
+	<image id="history-button"src="./images/historyicon.png" height="120" width="100" onclick="populateAnalysis()"/>
+    <!--TODO make history button go to history tag so user does not have to scroll -->
+    <ul id="history"></ul>
 </body>
+
 </html>
