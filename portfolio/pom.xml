@@ -25,8 +25,6 @@
       <scope>provided</scope>
     </dependency>
 
-
-
     <dependency>
      <groupId>com.google.code.gson</groupId>
      <artifactId>gson</artifactId>
@@ -45,10 +43,6 @@
      <version>1.55.0</version>
     </dependency>
 
-
-
-
-    
     <dependency>
         <groupId>com.google.code.gson</groupId>
         <artifactId>gson</artifactId>
@@ -56,9 +50,23 @@
     </dependency>
 
     <dependency>
-        <groupId>com.google.appengine</groupId>
-        <artifactId>appengine-api-1.0-sdk</artifactId>
-        <version>1.9.59</version>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-api-1.0-sdk</artifactId>
+      <version>1.9.59</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
@@ -72,7 +80,6 @@
         <artifactId>appengine-maven-plugin</artifactId>
         <version>2.2.0</version>
         <configuration>
-          <!-- TODO: set project ID. -->
           <deploy.projectId>awesomepod</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
