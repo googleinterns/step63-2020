@@ -43,7 +43,8 @@
 	<br/>
 	<ul class="icon">
 		<li><a class="long-icon" href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
-		<li><a href="/journal.html">&nbsp;&nbsp;<img src="./images/journal-selected.png" height="120" width="120"></a></li>
+		<li><a href="/journal.html">&nbsp;&nbsp;<img src="./images/journal-selected.png" height="120" width="120"></a>
+		</li>
 		<li><a href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
 		<li><a href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a>
 		</li>
@@ -57,31 +58,31 @@
 		<li>&ensp;E</li>
 		<li>&nbsp;M</li>
 	</ul>
-    <!-- TODO: Add sound options ambient noises, affirmations, music -->
+	<!-- TODO: Add sound options ambient noises, affirmations, music -->
 	<form action="/journal" method="POST">
 
-
+        <!--TODO: Fix date spacing so it relies on margin % instead of in-line spaces-->
+        <!--TODO: Use cursive font for dates-->
 		<span id="time"></span>
-
-		<br/>
-		<br/>
 		<div id="prompt"></div>
 		<div id="textarea">
-			<textarea name ="journal-input" id = "journal-input" type="text" rows="11" cols="40">
+			<textarea name ="journal-input" id = "journal-input" type="text" rows="20" cols="50">
         </textarea>
 			<input type="image" src="./images/submiticon.png" alt="submit" height="50" width="80"/>
         </div>
 
 	</form>
-    <ul class ="noise">
-        <li><img src="./images/loginicon.png" height="50" width="50"></li>
-        <li><img src="./images/loginicon.png" height="50" width="50"></li>
-        <li><img src="./images/loginicon.png" height="50" width="50"></li>
-    <ul>
-	<br/>
-	<image id="history-button"src="./images/historyicon.png" height="120" width="100" onclick="populateAnalysis()"/>
-    <!--TODO make history button go to history tag so user does not have to scroll -->
-    <ul id="history"></ul>
+    <image id="history-button" src="./images/historyicon.png" height="96" width="80" onclick="populateAnalysis()" />
+    <div id="noise">
+	<img src="./images/musicicon.png" height="40" width="50" onclick="document.getElementById('music1').play()"/>
+	<img src="./images/ambienticon.png" height="50" width="50" onclick="document.getElementById('ambient1').play()"/>
+	<img src="./images/affirmicon.png" height="50" width="50" onclick="document.getElementById('affirm1').play()"/>
+    </div>
+    <audio id="music1" src="./audio/music1.mp3"></audio>
+    <audio id="ambient1" src="./audio/ambient1.mp3"></audio>
+    <audio id="affirm1" src="./audio/affirm1.mp3"></audio>
+	<!--TODO make history button go to history tag so user does not have to scroll -->
+	<ul id="history"></ul>
 </body>
 
 </html>

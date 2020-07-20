@@ -25,14 +25,7 @@
     <li>&ensp;E</li>
     <li>&nbsp;M</li>
     </ul>
-        <!--
-        <div id="navigation">
-            <button onclick="location.href = '/index.html'">Home</button>
-            <button onclick="location.href = '/journal.html'">Journal</button>
-            <button onclick="location.href = '/resources.html'">Resources</button>
-        </div>
-        -->
-        <p>How are you feeling today?</p>
+        <p id="question">How are you feeling today?</p>
         <div id="options">
             <label class="radio">
                 <input type="radio" name="Q1" value="1" onclick="addChoice(this.value,this.name)">
@@ -62,7 +55,7 @@
 
             <br>
 
-        <p>How are family and friend relationships?</p>
+        <p id="question">How are family and friend relationships?</p>
             <label class="radio">
                 <input type="radio" name="Q2" value="1" onclick="addChoice(this.value,this.name)">
                 Bad
@@ -91,7 +84,7 @@
             <br>
 
         </div>
-        <div style="text-align: right;"><input type="submit" onclick="fillCharts()"></input></div>
+        <div style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>
 
         <div id="curve_chart" style="width: 500px; height: 200px"></div>
         <div id="curve_chart2" style="width: 500px; height: 200px"></div>
