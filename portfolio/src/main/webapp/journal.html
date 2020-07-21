@@ -58,11 +58,10 @@
 		<li>&ensp;E</li>
 		<li>&nbsp;M</li>
 	</ul>
-	<!-- TODO: Add sound options ambient noises, affirmations, music -->
 	<form action="/journal" method="POST">
 
-        <!--TODO: Fix date spacing so it relies on margin % instead of in-line spaces-->
-        <!--TODO: Use cursive font for dates-->
+		<!--TODO: Fix date spacing so it relies on margin % instead of in-line spaces-->
+		<!--TODO: Use cursive font for dates-->
 		<span id="time"></span>
 		<div id="prompt"></div>
 		<div id="textarea">
@@ -72,17 +71,17 @@
         </div>
 
 	</form>
-    <image id="history-button" src="./images/historyicon.png" height="96" width="80" onclick="populateAnalysis()" />
-    <div id="noise">
-	<img src="./images/musicicon.png" height="40" width="50" onclick="document.getElementById('music1').play()"/>
-	<img src="./images/ambienticon.png" height="50" width="50" onclick="document.getElementById('ambient1').play()"/>
-	<img src="./images/affirmicon.png" height="50" width="50" onclick="document.getElementById('affirm1').play()"/>
+	<image id="history-button" src="./images/historyicon.png" height="96" width="80" onclick="populateAnalysis()" />
+	<div id="noise">
+		<img src="./images/musicicon.png" height="40" width="50" onclick="document.getElementById('music1').play()"/>
+		<img src="./images/ambienticon.png" height="50" width="50" onclick="document.getElementById('ambient1').play()"/>
+		<img src="./images/affirmicon.png" height="50" width="50" onclick="document.getElementById('affirm1').play()"/>
     </div>
-    <audio id="music1" src="./audio/music1.mp3"></audio>
-    <audio id="ambient1" src="./audio/ambient1.mp3"></audio>
-    <audio id="affirm1" src="./audio/affirm1.mp3"></audio>
-	<!--TODO make history button go to history tag so user does not have to scroll -->
-	<ul id="history"></ul>
+		<audio id="music1" src="./audio/music1.mp3"></audio>
+		<audio id="ambient1" src="./audio/ambient1.mp3"></audio>
+		<audio id="affirm1" src="./audio/affirm1.mp3"></audio>
+		<!--TODO make history button go to history tag so user does not have to scroll -->
+		<ul id="history"></ul>
 </body>
 
 </html>

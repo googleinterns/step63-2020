@@ -24,6 +24,29 @@
     <li>&ensp;R</li>
     <li>&ensp;E</li>
     <li>&nbsp;M</li>
+    <script>
+        var currentTime = new Date().getHours();
+        if (currentTime <= 5 | currentTime>20) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://singularityhub.com/wp-content/uploads/2019/07/canyon-night-sky-stars-mark-basarab-1OtUkD_8svc-unsplash.jpg')";
+            }
+        }
+        else if (currentTime <= 12 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://images-na.ssl-images-amazon.com/images/I/81-WPClTvLL._SL1500_.jpg')";
+            }
+        }
+        else if (currentTime <= 16 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('canyon.jpg')";
+            }
+        }
+        else if (currentTime <= 20 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://wallpapercave.com/wp/wp3076548.jpg')";
+            }
+        }
+    </script>
     </ul>
         <p id="question">How are you feeling today?</p>
         <div id="options">
