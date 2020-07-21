@@ -19,9 +19,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import com.google.gson.Gson;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.JsonObject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,30 +30,47 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
+    JsonObject person = new JsonObject();
+    Boolean status;
     UserService userService = UserServiceFactory.getUserService();
 
-    // If user is not logged in, show a login form (could also redirect to a login page)
+    // If user is not logged in, show a login form (could also redirect to a login page
     if (!userService.isUserLoggedIn()) {
       String loginUrl = userService.createLoginURL("/login");
-      out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      status = false;
+      person.addProperty("status", status);
+      person.addProperty("url", loginUrl);
+
+      String statusJson = new Gson().toJson(person);
+      response.getWriter().println(statusJson);
       return;
     }
 
     // If user has not set a nickname, redirect to nickname page
     String nickname = getUserNickname(userService.getCurrentUser().getUserId());
     if (nickname == null) {
-      response.sendRedirect("/nickname");
+      response.sendRedirect("/nickname.html");
       return;
     }
 
     // User is logged in and has a nickname, so the request can proceed
-    String logoutUrl = userService.createLogoutURL("/login");
-    out.println("<h1>Home</h1>");
-    out.println("<p>Hello " + nickname + "!</p>");
-    out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
-    out.println("<p><a href=\"/index.html\">Home</a>.</p>");
+    if(userService.isUserLoggedIn()) {    
+      String logoutUrl = userService.createLogoutURL("/login");
+      status = true;
+      
+      person.addProperty("url", logoutUrl);
+      person.addProperty("status", status);
+      person.addProperty("name", nickname);
+
+      response.setContentType("application/json;");
+      String statusJson = new Gson().toJson(person);
+      response.getWriter().println(statusJson);
+
+      System.out.println(statusJson);
+    }
+
+    response.sendRedirect("/index.html");
+    return;
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
@@ -73,3 +88,4 @@ public class LoginServlet extends HttpServlet {
     return nickname;
   }
 }
+
