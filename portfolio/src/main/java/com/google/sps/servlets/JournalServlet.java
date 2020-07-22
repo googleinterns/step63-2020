@@ -84,10 +84,10 @@ public class JournalServlet extends HttpServlet {
     
 
     List<String> comments = new ArrayList<>();
+    List<String> test = new ArrayList<>();
     comments.add("NEW ENTRY");
     comments.add(String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("email"))); 
     for (Entity entity : sentenceResults.asIterable()) {
-
         
         if (submissionTime != Long.valueOf(String.valueOf(entity.getProperty("time")))){
             submissionTime = Long.valueOf(String.valueOf(entity.getProperty("time")));
@@ -103,26 +103,29 @@ public class JournalServlet extends HttpServlet {
         }
 
         if (String.valueOf(entity.getProperty("average-score")) != "null") {
-            comments.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
-            comments.add(String.valueOf(entity.getProperty("average-score")));
+            test.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
+            test.add(String.valueOf(entity.getProperty("average-score")));
         }
-    }
+    
 
-    if (String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("subjects")) != "null"){
-        String [] subject = String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("subjects")).split(",");
+
+    if (String.valueOf(entity.getProperty("subjects")) != "null"){
+        String [] subject = String.valueOf(entity.getProperty("subjects")).split(",");
         List<String> subjectSentence = new ArrayList<String>(Arrays.asList(subject));
 
         if (subjectSentence.size()==2){
-            comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry." );
+            test.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry." );
         } else {
-            comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry. "+subjectSentence.get(3)+"  as well.");
+            test.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry. "+subjectSentence.get(3)+"  as well.");
         }
 
-        comments.add("Care to talk about that?");
+        test.add("Care to talk about that?");
 
-        }
+    }
 
-    String conversion = convertToJsonUsingGsonforLists(comments);
+    }
+
+    String conversion = convertToJsonUsingGsonforLists(test);
     response.setContentType("application/json");
     response.getWriter().println(conversion);
 
