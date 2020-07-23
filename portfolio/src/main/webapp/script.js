@@ -58,4 +58,28 @@ function revealLogin() {
 after user logs in/out window.open("index.html");
   */
 }
-  
+
+/*
+var currentTime = new Date().getHours();
+if (currentTime <= 5 | currentTime>20) {
+    if (document.body) {
+        document.body.style.backgroundImage = "./images/nigh.png";
+    }
+}
+else if (currentTime <= 12 ) {
+    if (document.body) {
+        document.body.style.backgroundImage = "url('./images/homemorning.png')";
+    }
+}
+else if (currentTime <= 16 ) {
+    if (document.body) {
+        document.body.style.backgroundImage = "./images/homepage.png";
+    }
+}
+else if (currentTime <= 20 ) {
+    if (document.body) {
+        document.body.style.backgroundImage = "./images/canyon.jpg";
+    }
+}
+
+*/

@@ -23,22 +23,24 @@ public class FillChartServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("input");
     PreparedQuery results = datastore.prepare(query);
-
+    ArrayList<String> allProperties = new ArrayList<>();
 
     UserService userService = UserServiceFactory.getUserService();
-    User user = userService.getCurrentUser();
-    String userProperty = "";
-    String userNickname = user.getNickname();
+    if(userService.isUserLoggedIn()){
+        User user = userService.getCurrentUser();
+        String userProperty = "";
+        String userNickname = user.getNickname();
 
-    //Writes properties specific to the current user to /fill-charts to be fetched
-    ArrayList<String> allProperties = new ArrayList<>();
-    for(Entity entity:results.asIterable()){
-        userProperty = (String)entity.getProperty("User");
+        //Writes properties specific to the current user to /fill-charts to be fetched
+        for(Entity entity:results.asIterable()){
+            userProperty = (String)entity.getProperty("User");
 
-        if(userService.isUserLoggedIn() && userProperty.equals(userNickname)){
-        allProperties.add((String)entity.getProperty("input"));
+            if(userProperty.equals(userNickname)){
+                allProperties.add((String)entity.getProperty("input"));
+            }
         }
     }
-    response.getWriter().println(allProperties);
+        response.getWriter().println(allProperties);
+    
   }
 }

@@ -7,3 +7,39 @@
 #greeting-container {
   margin-top: 20px;
 }
+.icon {
+  list-style-type: none;
+  margin: 0;
+  padding-top: 5%;
+  padding: 100;
+  width: 15%;
+  height: 100%; /* Full height */
+  position: fixed; /* Make it stick, even on scroll */
+  overflow: auto; /* Enable scrolling if the sidenav has too much content */
+  right: 0;
+  font-size: 100px;
+  text-decoration: none;
+}
+.lorem-logo {
+  list-style-type: none;
+  margin: 0;
+  padding-top: 2%;
+  padding: 100;
+  width: 15%;
+  font-size: 180px;
+  color: white;
+  height: 100%; /* Full height */
+  position: fixed; /* Make it stick, even on scroll */
+  overflow: auto; /* Enable scrolling if the sidenav has too much content */
+  left: 0;
+  font-family: 'Poiret One', cursive;
+}
+body {
+ /*background-image:url("./images/homepage.png");*/
+ background-repeat: no-repeat;
+ background-size: cover;
+ background-attachment:  fixed;
+ }
+ a:link {
+    text-decoration: none;
+ }

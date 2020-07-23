@@ -14,6 +14,11 @@ const daySort = {
 
 //Draws the chart that tracks the user's mood
 function drawMoodChart(arr) {
+  console.log(arr);
+  if(arr.length == 0){
+      noData("curve_chart");
+  }
+  else{
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
@@ -25,10 +30,15 @@ function drawMoodChart(arr) {
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
   chart.draw(data, options);
+  }
 }
 
 //Draws the chart that tracks the user's friends&family relationships
 function drawRelationChart(arr) {
+  if(arr.length == 0){
+      noData("curve_chart2");
+  }
+  else{
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
@@ -40,6 +50,7 @@ function drawRelationChart(arr) {
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
 
   chart.draw(data, options);
+  }
 }
 
 
@@ -56,24 +67,25 @@ function fillCharts(){
 
         var Q1Array = [];
         var Q2Array = [];
+        if(properties.length != 0){
 
-        for(i=0; i<properties.length; i++){
-            var row = i;
-            var question = properties[row][2];
-            if(question == "Q1"){
-                Q1Array.push(properties[row]);
+            for(i=0; i<properties.length; i++){
+                var row = i;
+                var question = properties[row][2];
+                if(question == "Q1"){
+                    Q1Array.push(properties[row]);
+                }
+                else{
+                    Q2Array.push(properties[row]);
+                }
             }
-            else{
-                Q2Array.push(properties[row]);
-            }
-        }
 
 
-        Q1Array = sortArray(Q1Array);
-        Q2Array = sortArray(Q2Array);
-        finalPrep(Q1Array);
-        finalPrep(Q2Array);
-
+            Q1Array = sortArray(Q1Array);
+            Q2Array = sortArray(Q2Array);
+            finalPrep(Q1Array);
+            finalPrep(Q2Array);
+    }
         drawMoodChart(Q1Array);
         drawRelationChart(Q2Array);
 
@@ -102,4 +114,13 @@ function finalPrep(arr){
         arr[i][1] = parseInt(arr[i][1]);
     }
     arr.unshift(["Day", "Mood"]);
+}
+
+function noData(id){
+    var errorMessage = document.getElementById(id);
+    errorMessage.innerHTML = "No data to show";
+    errorMessage.style.textAlign = 'center';
+    errorMessage.style.backgroundColor= "#b68e9a";
+    errorMessage.style.fontSize = "18px";
+    errorMessage.style.color = "white";
 }
