@@ -98,6 +98,8 @@ public class JournalServlet extends HttpServlet {
     
 
     for (Entity entity : sentenceResults.asIterable()) {
+
+        if ((entity.getProperty("email") != "null") && (entity.getProperty("email") == currentEmail)) {
         
         if (submissionTime != Long.valueOf(String.valueOf(entity.getProperty("time")))){
             submissionTime = Long.valueOf(String.valueOf(entity.getProperty("time")));
@@ -130,6 +132,7 @@ public class JournalServlet extends HttpServlet {
 
     }
 
+    }
     }
 
     String conversion = convertToJsonUsingGsonforLists(test);
