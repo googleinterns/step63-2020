@@ -57,8 +57,8 @@ public class ChartServletTest extends TestCase {
 
 
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        request.setAttribute("name", "Q1");
-        request.setAttribute("value", "1");
+        when(request.getParameter("name")).thenReturn("Q1");
+        when(request.getParameter("value")).thenReturn("1");
         String currentDate = "2020/07/22";
         String userNickname = "test@example.com";
         ArrayList<String> testList = new ArrayList<>();
@@ -74,7 +74,7 @@ public class ChartServletTest extends TestCase {
         test.setProperty("User", userNickname);
 
         //doReturn(test).when(servlet).addProperties(currentDate,request,userNickname) 1st Option
-        when(servlet.addProperties(currentDate, request, userNickname).thenReturn(test); //2nd Option
+        when(servlet.addProperties(currentDate, request, userNickname)).thenReturn(test); //2nd Option
 
         /* When I do doReturn(), the error I get is: 
 
