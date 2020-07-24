@@ -82,4 +82,8 @@ API object is parameter of test, break down code into logical functions
 in the already existing servlet (allows to test functions in isolation)
 
 make mock datastore, create a new class that acts like the datastore, but does nothing
+
+getting this error:
+[ERROR] /usr/local/google/home/erysd/step/portfolio/step63-2020/portfolio/src/test/java/com/google/sps/servlets/NickNameTest.java:[27,54] package com.google.appengine.tools.development.testing does not exist
+[ERROR] /usr/local/google/home/erysd/step/portfolio/step63-2020/portfolio/src/test/java/com/google/sps/servlets/NickNameTest.java:[28,54] package com.google.appengine.tools.development.testing does not exist
 */
