@@ -2,6 +2,7 @@
 package com.google.sps;
 
 import java.util.List;
+import com.google.sps.servlets.JournalServlet;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,4 +35,13 @@ public final class TestingTest {
     Mockito.verify(mockedList).add("one");
     Mockito.verify(mockedList).clear();
   }
+
+  
+  /**
+  @Test
+  public void testEmail() {
+    JournalServlet email = new JournalServlet();
+    Assert.assertEquals("chiamaka@google.com", email.setEmail());
+  }
+  */
 }
