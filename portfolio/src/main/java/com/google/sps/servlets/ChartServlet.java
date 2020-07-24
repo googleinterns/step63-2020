@@ -37,7 +37,7 @@ public class ChartServlet extends HttpServlet {
 
     Query replaceQuery = new Query("input");
     PreparedQuery replaceResults = datastore.prepare(replaceQuery);
-    Gson g = new Gson();
+
 
     /*If the user enters a different value on the same day, delete the previous entry and replace
     with new.*/
@@ -74,6 +74,12 @@ public class ChartServlet extends HttpServlet {
 
     
 
+    Entity input = addProperties(currentDate, request, userNickname);
+    datastore.put(input);
+
+  }
+
+  public static Entity addProperties(String currentDate, HttpServletRequest request, String userNickname){
     //Adds day, value, and question to arraylist
     List<String> properties = new ArrayList<>();
     properties.add(currentDate);
@@ -83,10 +89,11 @@ public class ChartServlet extends HttpServlet {
     
 
     //Creates entity, sets the properties, adds to datastore
+    Gson g = new Gson();
     Entity input = new Entity("input");
     input.setProperty("input", g.toJson(properties));
     input.setProperty("User", userNickname);
-    datastore.put(input);
-
+    System.out.println(input);
+    return input;
   }
 }
