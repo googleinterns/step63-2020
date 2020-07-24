@@ -5,14 +5,50 @@
         <link rel="stylesheet" href="charts.css">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="charts.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
     </head>
     <body onload="fillCharts()">
-        <div id="navigation">
-            <button onclick="location.href = '/index.html'">Home</button>
-            <button onclick="location.href = '/journal.html'">Journal</button>
-            <button onclick="location.href = '/resources.html'">Resources</button>
-        </div>
-        <p>How are you feeling today?</p>
+        <br/>
+    <br/>
+    <ul class="icon" >
+    <li><a class="long-icon"  href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+    <li><a  href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a></li>
+    <li><a  href="/charts.html">&nbsp;&nbsp;<img src="./images/charts-selected.png" height="120" width="120"></a></li>
+    <li><a  href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a></li>
+    <li><a  href="/index.html">&nbsp;&nbsp;<img src="./images/homeicon.png" height="150" width="120"></a></li>
+    </ul>
+
+    <ul class="lorem-logo">
+    <li>&ensp;L</li>
+    <li>&nbsp;O</li>
+    <li>&ensp;R</li>
+    <li>&ensp;E</li>
+    <li>&nbsp;M</li>
+    <script>
+        var currentTime = new Date().getHours();
+        if (currentTime <= 5 | currentTime>20) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://singularityhub.com/wp-content/uploads/2019/07/canyon-night-sky-stars-mark-basarab-1OtUkD_8svc-unsplash.jpg')";
+            }
+        }
+        else if (currentTime <= 12 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://images-na.ssl-images-amazon.com/images/I/81-WPClTvLL._SL1500_.jpg')";
+            }
+        }
+        else if (currentTime <= 16 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('./images/canyon.jpg')";
+            }
+        }
+        else if (currentTime <= 20 ) {
+            if (document.body) {
+                document.body.style.backgroundImage = "url('https://wallpapercave.com/wp/wp3076548.jpg')";
+            }
+        }
+    </script>
+    </ul>
+        <p id="question">How are you feeling today?</p>
         <div id="options">
             <label class="radio">
                 <input type="radio" name="Q1" value="1" onclick="addChoice(this.value,this.name)">
@@ -21,7 +57,7 @@
             
             <label class="radio">
                 <input type="radio" name="Q1"  value="2" onclick="addChoice(this.value,this.name)">
-                
+                Iffy
             </label>
 
             <label class="radio">
@@ -31,7 +67,7 @@
 
             <label class="radio">
                 <input type="radio" name="Q1" value="4" onclick="addChoice(this.value,this.name)">
-                
+                Good
             </label>
 
             <label class="radio">
@@ -42,7 +78,7 @@
 
             <br>
 
-        <p>How are family and friend relationships?</p>
+        <p id="question">How are family and friend relationships?</p>
             <label class="radio">
                 <input type="radio" name="Q2" value="1" onclick="addChoice(this.value,this.name)">
                 Bad
@@ -50,7 +86,7 @@
             
             <label class="radio">
                 <input type="radio" name="Q2"  value="2" onclick="addChoice(this.value,this.name)">
-                
+                Iffy
             </label>
 
             <label class="radio">
@@ -60,7 +96,7 @@
 
             <label class="radio">
                 <input type="radio" name="Q2" value="4" onclick="addChoice(this.value,this.name)">
-                
+                Good
             </label>
 
             <label class="radio">
@@ -71,7 +107,7 @@
             <br>
 
         </div>
-        <div style="text-align: right;"><input type="submit" onclick="fillCharts()"></input></div>
+        <div style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>
 
         <div id="curve_chart" style="width: 500px; height: 200px"></div>
         <div id="curve_chart2" style="width: 500px; height: 200px"></div>

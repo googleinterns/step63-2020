@@ -44,7 +44,8 @@ function revealLogin() {
     }
     else if (person.status == false){
       var a = document.createElement('a');  
-      var link = document.createTextNode("Log in Here"); 
+      var link = document.createTextNode("Log in Here");
+      document.body.style.backgroundImage = "url(http://www.hoshinoresorts-magazine.com/wp-content/uploads/2018/03/facebook-6.jpg)";
       a.appendChild(link);  
       a.title = "Log in Here";  
       a.href = person.url;  
