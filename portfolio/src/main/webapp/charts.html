@@ -7,6 +7,7 @@
         <script src="charts.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" href="./images/charts-favicon.png" />
     </head>
     <body onload="fillCharts()">
         <br/>
@@ -108,10 +109,11 @@
             <br>
 
         </div>
-        <div style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>
-
+        <div id = "submit-button" style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>
+        <div id ="charts">
         <div id="curve_chart" style="width: 500px; height: 200px"></div>
         <div id="curve_chart2" style="width: 500px; height: 200px"></div>
+        </div>
 
     </body>
 </html>

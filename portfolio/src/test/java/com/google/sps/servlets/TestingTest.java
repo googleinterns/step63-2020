@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.util.ArrayList;
 
 import org.mockito.Mockito;
 
@@ -37,11 +38,64 @@ public final class TestingTest {
   }
 
   
-  /**
+  
   @Test
   public void testEmail() {
-    JournalServlet email = new JournalServlet();
-    Assert.assertEquals("chiamaka@google.com", email.setEmail());
+
+    Assert.assertEquals("chiamaka@google.com", JournalServlet.setEmail());
+  }
+
+  @Test
+  public void everyEntityHasSalienceScore() {
+    
+    List<String> test = new ArrayList();
+    test.add("string");
+    test.add("0.0");
+    test.add("string");
+    test.add("string");
+
+    List<String> expected = new ArrayList();
+    expected.add("Unequal amount of subject, type, and salience");
+
+    Assert.assertEquals(expected, JournalServlet.getSubjects(test));
+  }
+
+  @Test
+  public void catchUnequalAttributes() {
+    
+    List<String> test = new ArrayList();
+    test.add("string");
+    test.add("0.0");
+    test.add("string");
+
+    List<String> expected = new ArrayList();
+    expected.add("Unequal amount of subject, type, and salience");
+
+    Assert.assertEquals(expected, JournalServlet.getSubjects(test));
+  }
+  
+  /**
+  @Test
+  public void filterIfCommon() {
+    
+    List test = Mockito.mock(List.class);
+    test.add("string");
+    test.add("0.3");
+    test.add("COMMON");
+    test.add("Chiamaka");
+    test.add("0.7");
+    test.add("PROPER");
+
+    List expected = Mockito.mock(List.class);
+    expected.add("Chiamaka");
+    test.add("0.7");
+    test.add("PROPER");
+    
+    Assert.assertEquals(expected, JournalServlet.getSubjects(test));
   }
   */
+
+
+  
+  
 }

@@ -226,7 +226,7 @@ public class JournalServlet extends HttpServlet {
 
     averageScore /= ((entryBySentence.size()-charsIgnored));
 
-
+    /***
     List<String> entityNameSalianceAndType = new ArrayList<>();
 
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
@@ -244,9 +244,9 @@ public class JournalServlet extends HttpServlet {
             entityNameSalianceAndType.add(entity.getName());
             entityNameSalianceAndType.add(String.valueOf(entity.getSalience()));
             //entityAnalysis.add("Metadata: ");
-            /**for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
-            entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
-            }*/
+            //for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
+            //entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
+            }
             for (EntityMention mention : entity.getMentionsList()) {
             //entityAnalysis.add("Begin offset: %d\n"+mention.getText().getBeginOffset());
             //entityContent.add("Content: %s\n"+mention.getText().getContent());
@@ -254,6 +254,7 @@ public class JournalServlet extends HttpServlet {
             }
         }
     }
+    **/
 
     Entity scoreEntity = new Entity("Sentence");
     scoreEntity.setProperty("average-score", averageScore);
@@ -272,6 +273,8 @@ public class JournalServlet extends HttpServlet {
     //subjectEntity
     Entity sentenceEntity = new Entity("Sentence");
 
+    /**
+
     List mostImportant = new ArrayList();
 
     if (entityNameSalianceAndType.size()== 3 | entityNameSalianceAndType.size()== 4) {
@@ -289,7 +292,10 @@ public class JournalServlet extends HttpServlet {
         mostImportant.add(entityNameSalianceAndType.get(2));
         mostImportant.add(entityNameSalianceAndType.get(3));
     }
-    String entityNamesInJSON = convertToJsonUsingGsonforLists(mostImportant);
+    **/
+
+
+    String entityNamesInJSON = convertToJsonUsingGsonforLists(getSubjects(input));
     sentenceEntity.setProperty("subjects", entityNamesInJSON);
     sentenceEntity.setProperty("time", inputTime);
     sentenceEntity.setProperty("email",email);
@@ -319,6 +325,67 @@ public class JournalServlet extends HttpServlet {
         }
 
         return email;
+  }
+  private List<String> getEntityAnalysis(String input){
+    
+    List<String> entityNameSalianceAndType = new ArrayList<>();
+
+    try (LanguageServiceClient language = LanguageServiceClient.create()) {
+        Document entityDoc = Document.newBuilder().setContent(input).setType(Type.PLAIN_TEXT).build();
+        AnalyzeEntitiesRequest entityRequest =
+            AnalyzeEntitiesRequest.newBuilder()
+                .setDocument(entityDoc)
+                .setEncodingType(EncodingType.UTF16)
+                .build();
+
+        AnalyzeEntitiesResponse EntityResponse = language.analyzeEntities(entityRequest);
+
+        // Print the response
+        for (com.google.cloud.language.v1.Entity entity : EntityResponse.getEntitiesList()) {
+            entityNameSalianceAndType.add(entity.getName());
+            entityNameSalianceAndType.add(String.valueOf(entity.getSalience()));
+            //entityAnalysis.add("Metadata: ");
+            //for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
+            //entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
+            //}
+        for (EntityMention mention : entity.getMentionsList()) {
+            //entityAnalysis.add("Begin offset: %d\n"+mention.getText().getBeginOffset());
+            //entityContent.add("Content: %s\n"+mention.getText().getContent());
+            entityNameSalianceAndType.add(String.valueOf(mention.getType()));
+            }
+        }
+
+    } catch (IOException e) {
+
+    }
+    return entityNameSalianceAndType;
+  }
+
+  
+  private List<String> getSubjects(String inputString){
+    
+    List<String> entityNameSalianceAndType = getEntityAnalysis(inputString);
+
+    List mostImportant = new ArrayList();
+
+    if (entityNameSalianceAndType.size() <3) {
+        mostImportant.add("nothing");
+        mostImportant.add("0.");
+    }
+    
+    else if ((entityNameSalianceAndType.size())%3 == 1) {
+        mostImportant.add("Unequal amount of subject, type, and salience");
+    }
+    else {
+        mostImportant.add(entityNameSalianceAndType.get(0));
+        mostImportant.add(entityNameSalianceAndType.get(1));
+        mostImportant.add(entityNameSalianceAndType.get(2));
+        mostImportant.add(entityNameSalianceAndType.get(3));
+    }
+
+    return mostImportant;
+
+
   }
 
 
