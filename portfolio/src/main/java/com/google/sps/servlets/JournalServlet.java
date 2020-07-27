@@ -387,6 +387,7 @@ public class JournalServlet extends HttpServlet {
 
 
   }
+  
 
 
  
