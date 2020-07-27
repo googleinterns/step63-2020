@@ -46,37 +46,44 @@ public class ChartServletTest extends TestCase {
         helper.setUp();
     }
 
-    @After
-    public void tearDown() {
-        helper.tearDown();
-    }
-
-    public void testDoPostSucceed() throws ServletException, IOException {
-        ChartServlet servlet = Mockito.mock(ChartServlet.class);
-
-
+    public void testAddProperties() throws ServletException, IOException {
+        // This is NOT a mock, we want to test an ACTUAL Chart servlet.
+        ChartServlet servlet = new ChartServlet();
 
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        when(request.getParameter("name")).thenReturn("Q1");
-        when(request.getParameter("value")).thenReturn("1");
+        String name = "Q1";
+        String value = "1";
+
+        // Construct the mock request
+        when(request.getParameter("name")).thenReturn(name);
+        when(request.getParameter("value")).thenReturn(value);
+
+        // Make the other arguments
         String currentDate = "2020/07/22";
         String userNickname = "test@example.com";
+
+        // Make the call to addProperties
+        Entity output = servlet.addProperties(currentDate, request, userNickname);
+
+        // Build the expected props in the output Entity
         ArrayList<String> testList = new ArrayList<>();
         testList.add(currentDate);
-        testList.add("1");
-        testList.add("Q2");
-
+        testList.add(value);
+        testList.add(name);
         Gson g = new Gson();
         String testProps = g.toJson(testList);
 
-        Entity test = new Entity("input");
-        test.setProperty("input", testProps);
-        test.setProperty("User", userNickname);
+        // Assert that the properties of the output look like what we expect.
+        assertEquals(output.getProperty("input"), testProps);
+        assertEquals(output.getProperty("User"), userNickname);
+
+        /* Old stuff below here */
 
         //doReturn(test).when(servlet).addProperties(currentDate,request,userNickname) 1st Option
-        when(servlet.addProperties(currentDate, request, userNickname)).thenReturn(test); //2nd Option
+        //when(servlet.addProperties(currentDate, request, userNickname)).thenReturn(test); //2nd Option
+        //when(servlet.sayHello("jason")).thenReturn("Hello jason");
 
-        /* When I do doReturn(), the error I get is: 
+        /* When I do doReturn(), the error I get is:
 
         Unfinished stubbing detected here:
         -> at com.google.sps.servlets.ChartServletTest.testDoPostSucceed(ChartServletTest.java:76)
@@ -106,7 +113,7 @@ public class ChartServletTest extends TestCase {
 
 
 
-        The only time I use .getParameter is when getting the value and name from html to put into an arraylist in ChartServlet, 
+        The only time I use .getParameter is when getting the value and name from html to put into an arraylist in ChartServlet,
         which does return a string.*/
     }
 }

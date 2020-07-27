@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.DayOfWeek;
-import java.time.LocalDate; 
+import java.time.LocalDate;
 
 @WebServlet("/charts")
 public class ChartServlet extends HttpServlet {
@@ -72,7 +72,7 @@ public class ChartServlet extends HttpServlet {
         catch(EntityNotFoundException e){}
     }
 
-    
+
 
     Entity input = addProperties(currentDate, request, userNickname);
     datastore.put(input);
@@ -85,8 +85,6 @@ public class ChartServlet extends HttpServlet {
     properties.add(currentDate);
     properties.add((String)request.getParameter("value"));
     properties.add((String)request.getParameter("name"));
-
-    
 
     //Creates entity, sets the properties, adds to datastore
     Gson g = new Gson();
