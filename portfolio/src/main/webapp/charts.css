@@ -3,6 +3,7 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
+    background-attachment:  fixed;
 }
 
 p{
@@ -97,4 +98,10 @@ label{
     font-family: 'Questrial', sans-serif;
     font-size: 100px;
     text-shadow: 2px 2px 4px #000000;
+}
+#submit-button {
+    padding-top: 10%;
+}
+#charts {
+    padding-top: 5%;
 }
