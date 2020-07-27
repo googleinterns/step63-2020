@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gson.JsonObject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,47 +36,31 @@ public class NickNameServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
-
-    out.println("<h1>Set Nickname</h1>");
-
+    JsonObject status = new JsonObject();
     UserService userService = UserServiceFactory.getUserService();
-
-    
+  
     if (userService.isUserLoggedIn()) {
       String nickname = getUserNickname(userService.getCurrentUser().getUserId());
-      out.println("<p>Set your nickname here:</p>");
-      out.println("<form method=\"POST\" action=\"/nickname\">");
-      out.println("<input name=\"nickname\" value=\"" + nickname + "\" />");
-      out.println("<br/>");
-      out.println("<button>Submit</button>");
-      out.println("</form>");
+      status.addProperty("status", true);
+      status.addProperty("name", nickname);
     } else {
       String loginUrl = userService.createLoginURL("/nickname");
-      out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      status.addProperty("status", false);
+      status.addProperty("url", loginUrl);
     }
   }
 
+  //adds the nickname to the datastore
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> emails = new ArrayList<>();
-    List<String> names = new ArrayList<>();
-    PrintWriter out = response.getWriter();
-
     UserService userService = UserServiceFactory.getUserService();
-    String userEmail = userService.getCurrentUser().getEmail();
-    emails.add(userEmail);
-    System.out.println(emails);
 
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/nickname");
+      response.sendRedirect("/nickname.html");
       return;
     }
 
     String nickname = request.getParameter("nickname");
-    names.add(nickname);
-    System.out.println("names: " + names);
     String id = userService.getCurrentUser().getUserId();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -85,14 +70,7 @@ public class NickNameServlet extends HttpServlet {
     // The put() function automatically inserts new data or updates existing data based on ID
     datastore.put(entity);
 
-    
-    if(!emails.contains(userEmail) && names.contains(nickname)){
-        out.println("<p>this username is already in use</p>");
-        response.sendRedirect("/nickname");
-        return;
-    }
-
-    response.sendRedirect("/login");
+    response.sendRedirect("/index.html");
   }
 
   /**
