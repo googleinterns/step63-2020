@@ -5,6 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
+import javax.servlet.ServletException;
+import java.io.IOException;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -38,10 +42,10 @@ public class NickNameTest extends TestCase {
     helper.setUp();
   }
 
-  @After
-  public void tearDown() {
-    helper.tearDown();
-  }
+//   @After
+//   public void tearDown() {
+//     helper.tearDown();
+//   }
 
 // Datastore mockDatastore = Mockito.mock(DatastoreService.class);
 // Entity mockEntity = Mockito.mock(Entity.class);
@@ -51,14 +55,16 @@ public class NickNameTest extends TestCase {
 
   //adds nickname to datastore
   @Test
-  public void successfulDoPost() {
-    NickNameServlet servlet = Mockito.mock(NickNameServlet.class);
-    UserService mockUser = Mockito.mock(UserServiceFactory.class);
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    Datastore mockDatastore = Mockito.mock(DatastoreService.class);
+  public void successfulDoPost() throws ServletException, IOException{
+    NickNameServlet servlet = new NickNameServlet();
+    UserService mockUser = Mockito.mock(UserService.class);
+    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+    DatastoreService mockDatastore = Mockito.mock(DatastoreService.class);
 
     if (!mockUser.isUserLoggedIn()){
       //make sure that it redirects them to nickname.html
+    //   when(response.sendRedirect("/nickname.html")).thenReturn("/nickname.html");
+    // assertEquals(response.sendRedirect("/nickname.html"), "/nickname.html");
       response.sendRedirect("/nickname.html");
     }
 
@@ -68,10 +74,14 @@ public class NickNameTest extends TestCase {
     Entity test = new Entity("User", id);
     test.setProperty("id", id);
     test.setProperty("nickname", nickname);
-
-    when(mockDatastore.put(test)).thenReturn(test);
+    
+    when(mockDatastore.put(test)).thenReturn("added");
+    assertEquals(mockDatastore.put(test), "added");
     
     //make sure it redirects them to home page
+    // when(response.sendRedirect("/index.html")).thenReturn("/index.html");
+    // assertEquals(response.sendRedirect("/index.html"), "/index.html");
+
     response.sendRedirect("/index.html");
     
   }
