@@ -3,6 +3,7 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
+    background-attachment:  fixed;
 }
 
 p{
@@ -17,9 +18,19 @@ p{
 .radio{
     padding: 20px;
     width: 150px;
-
-  
+    font-family: 'Questrial', sans-serif;
+    font-size: 60px;
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(50%, #25b0a9), color-stop(50%, #fee603));
+    background-image: linear-gradient(to right, rgb(0,0,0,0) 50%, rgb(255,255,255,0.3) 50%);
+    background-position: 0;
+    background-size: 200%;
+    -webkit-transition: all 0.4s;
+    transition: all 0.4s;
+    text-shadow: 2px 2px 4px #000000;
 }
+.radio:hover {
+    background-position: -100%;
+    }
 
 #options{
     text-align: center;
@@ -82,3 +93,15 @@ label{
  a:link {
     text-decoration: none;
  }
+
+#question {
+    font-family: 'Questrial', sans-serif;
+    font-size: 100px;
+    text-shadow: 2px 2px 4px #000000;
+}
+#submit-button {
+    padding-top: 10%;
+}
+#charts {
+    padding-top: 5%;
+}
