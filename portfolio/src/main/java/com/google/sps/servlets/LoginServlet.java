@@ -65,8 +65,6 @@ public class LoginServlet extends HttpServlet {
       response.setContentType("application/json;");
       String statusJson = new Gson().toJson(person);
       response.getWriter().println(statusJson);
-
-      System.out.println(statusJson);
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */

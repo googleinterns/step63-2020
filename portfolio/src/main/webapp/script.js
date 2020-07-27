@@ -13,18 +13,8 @@
 // limitations under the License.
 
 function revealLogin() {
-  console.log("fetching");
-  var url;
   fetch('/login').then(response => response.json()).then((person) => {
-    console.log("is user logged in? " + person.status);
-    if (person.status == false){
-      window.open(person.url);
-      console.log("logged in");
-    }
-    else if(person.status == true){
-      window.open(person.url);
-      console.log("logged out");
-    }
+    window.location.replace(person.url);
   });
 }
 
