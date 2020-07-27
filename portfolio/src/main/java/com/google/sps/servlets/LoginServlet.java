@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 
     // If user is not logged in, show a login form (could also redirect to a login page
     if (!userService.isUserLoggedIn()) {
-      String loginUrl = userService.createLoginURL("/login");
+      String loginUrl = userService.createLoginURL("/nickname.html");
       status = false;
       person.addProperty("status", status);
       person.addProperty("url", loginUrl);
@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 
     // User is logged in and has a nickname, so the request can proceed
     if(userService.isUserLoggedIn()) {    
-      String logoutUrl = userService.createLogoutURL("/login");
+      String logoutUrl = userService.createLogoutURL("/");
       status = true;
       
       person.addProperty("url", logoutUrl);

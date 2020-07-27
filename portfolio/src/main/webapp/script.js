@@ -12,51 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function revealLogin() {
-  console.log("fetching");
-  var url;
+ffunction revealLogin() {
   fetch('/login').then(response => response.json()).then((person) => {
-    console.log("is user logged in? " + person.status);
-    if (person.status == false){
-      url = person.url;
-      // var a = document.createElement('a');  
-      // var link = document.createTextNode("Log in Here"); 
-      // a.appendChild(link);  
-      // a.title = "Log in Here";  
-      // a.href = person.url;  
-      // document.body.appendChild(a);
-      window.open(person.url, "", "", false);
-
-      // window.close("/login");
-
-      // window.location.replace("index.html");
-      console.log("logged in");
-    }
-    else if(person.status == true){
-      url = person.url;
-      // var a = document.createElement('a');  
-      // var link = document.createTextNode("Log out Here"); 
-      // a.appendChild(link);  
-      // a.title = "Log out Here";  
-      // a.href = person.url;  
-      // document.body.appendChild(a);
-
-      window.open(person.url, "", "", false);
-
-      // window.location.replace("index.html");
-      console.log("logged out");
-    }
-    // window.close("/login");
-
+    window.location.replace(person.url);
   });
-  // var self = window.self() + "/login";
-
-  // window.close(url);
-  // window.close(self);
-  
-  /*
-after user logs in/out window.open("index.html");
-  */
 }
 
 /*
