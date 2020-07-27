@@ -93,7 +93,6 @@ public class ChartServlet extends HttpServlet {
     Entity input = new Entity("input");
     input.setProperty("input", g.toJson(properties));
     input.setProperty("User", userNickname);
-    System.out.println(input);
     return input;
   }
 }

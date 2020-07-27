@@ -54,29 +54,7 @@ function addChoice(value,name){
 function fillCharts(){
     fetch('/fill-charts').then(response => response.json()).then((properties)=>{
 
-        var Q1Array = [];
-        var Q2Array = [];
-        if(properties.length != 0){
-
-            for(i=0; i<properties.length; i++){
-                var row = i;
-                var question = properties[row][2];
-                if(question == "Q1"){
-                    Q1Array.push(properties[row]);
-                }
-                else{
-                    Q2Array.push(properties[row]);
-                }
-            }
-
-
-            Q1Array = sortArray(Q1Array);
-            Q2Array = sortArray(Q2Array);
-            finalPrep(Q1Array);
-            finalPrep(Q2Array);
-        }
-        drawMoodChart(Q1Array);
-        drawRelationChart(Q2Array);
+        inputData(properties);
 
 
     });
@@ -113,4 +91,36 @@ function noData(id){
     errorMessage.style.backgroundColor= "#b68e9a";
     errorMessage.style.fontSize = "18px";
     errorMessage.style.color = "white";
+}
+
+function fillMonth(){
+    fetch('/fillMonth').then(response => response.json()).then((properties)=>{
+        inputData(properties)
+    });
+}
+
+function inputData(properties){
+    var Q1Array = [];
+    var Q2Array = [];
+    if(properties.length != 0){
+
+        for(i=0; i<properties.length; i++){
+            var row = i;
+            var question = properties[row][2];
+            if(question == "Q1"){
+                Q1Array.push(properties[row]);
+            }
+            else{
+                Q2Array.push(properties[row]);
+            }
+        }
+
+
+        Q1Array = sortArray(Q1Array);
+        Q2Array = sortArray(Q2Array);
+        finalPrep(Q1Array);
+        finalPrep(Q2Array);
+    }
+    drawMoodChart(Q1Array);
+    drawRelationChart(Q2Array);
 }
