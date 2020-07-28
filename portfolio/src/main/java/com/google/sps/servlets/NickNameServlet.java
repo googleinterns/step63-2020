@@ -34,22 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/nickname")
 public class NickNameServlet extends HttpServlet {
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    JsonObject status = new JsonObject();
-    UserService userService = UserServiceFactory.getUserService();
-  
-    if (userService.isUserLoggedIn()) {
-      String nickname = getUserNickname(userService.getCurrentUser().getUserId());
-      status.addProperty("status", true);
-      status.addProperty("name", nickname);
-    } else {
-      String loginUrl = userService.createLoginURL("/nickname");
-      status.addProperty("status", false);
-      status.addProperty("url", loginUrl);
-    }
-  }
-
   //adds the nickname to the datastore
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -73,20 +57,20 @@ public class NickNameServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /**
-   * Returns the nickname of the user with id, or empty String if the user has not set a nickname.
-   */
-  private String getUserNickname(String id) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return "";
-    }
-    String nickname = (String) entity.getProperty("nickname");
-    return nickname;
-  }
+  // /**
+  //  * Returns the nickname of the user with id, or empty String if the user has not set a nickname.
+  //  */
+  // private String getUserNickname(String id) {
+  //   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  //   Query query =
+  //       new Query("UserInfo")
+  //           .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+  //   PreparedQuery results = datastore.prepare(query);
+  //   Entity entity = results.asSingleEntity();
+  //   if (entity == null) {
+  //     return "";
+  //   }
+  //   String nickname = (String) entity.getProperty("nickname");
+  //   return nickname;
+  // }
 }

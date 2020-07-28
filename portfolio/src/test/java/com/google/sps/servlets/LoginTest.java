@@ -2,7 +2,7 @@ package com.google.sps;
 import java.util.List;
 
 import com.google.sps.servlets.LoginServlet;
-
+import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,31 +45,49 @@ public final class LoginTest {
     helper.setUp();
   }
 
+  @Test
   public void testDoGet() throws ServletException, IOException{
     LoginServlet servlet = new LoginServlet();
     UserService mockUser = Mockito.mock(UserService.class);
-    JsonObject mockObj = Mockito.mock(JsonObject.class);
-    JsonObject actual = Mockito.mock(JsonObject.class);
+    JsonObject mockObj1 = new JsonObject();
+    JsonObject mockObj2 = new JsonObject();
+    String expected1 = "{\"status\":false,\"url\":\"/nickname.html\"}";
+    String expected2 = "{\"url\":\"/\",\"status\":true,\"name\":\"example\"}";
 
 
     if(!mockUser.isUserLoggedIn()){
-      String loginUrl = mockUser.createLoginURL("/index.html");
-      mockObj.addProperty("status", false);
-      mockObj.addProperty("url", loginUrl);
+      mockObj1.addProperty("status", false);
+      mockObj1.addProperty("url", "/nickname.html");
 
-      String json = new Gson().toJson(mockObj);
+      String json1 = new Gson().toJson(mockObj1);
+      Assert.assertEquals(expected1, json1);
     }
-
     String name = "example";
-    String logoutUrl = mockUser.createLogoutURL("/");
-
-    mockObj.addProperty("status", true);
-    mockObj.addProperty("url", logoutUrl);
-    mockObj.addProperty("name", name);
-
-    String json = new Gson().toJson(mockObj);
     
-    assertEquals(json, actual);
+    mockObj2.addProperty("url", "/");
+    mockObj2.addProperty("status", true);
+    mockObj2.addProperty("name", name);
+
+    String json2 = new Gson().toJson(mockObj2); 
+    Assert.assertEquals(expected2, json2);
   }
 
+  @Test
+  public void testGetName() throws ServletException, IOException{
+    String id = "123456789";
+    String name = "example";
+    LoginServlet servlet = new LoginServlet();
+    DatastoreService mockDatastore = Mockito.mock(DatastoreService.class);
+
+    Query mockQuery = new Query("Test")
+      .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = mockDatastore.prepare(mockQuery);
+    Entity test = results.asSingleEntity();
+    if(test == null){
+        System.out.println("entity is null");
+        Assert.assertNull(test);
+    }
+
+    Assert.assertEquals(test.getProperty("nickname"), name);
+  }
 }
