@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-ffunction revealLogin() {
+function revealLogin() {
   fetch('/login').then(response => response.json()).then((person) => {
     window.location.replace(person.url);
   });
