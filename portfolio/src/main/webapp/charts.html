@@ -13,7 +13,7 @@
         <br/>
     <br/>
     <ul class="icon" >
-    <li><a class="long-icon"  href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+    <li><a class="long-icon"  href="/login.html"><img src="./images/loginicon.png" height="100" width="200"></a></li>
     <li><a  href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a></li>
     <li><a  href="/charts.html">&nbsp;&nbsp;<img src="./images/charts-selected.png" height="120" width="120"></a></li>
     <li><a  href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a></li>
@@ -109,11 +109,15 @@
             <br>
 
         </div>
-        <div style="text-align: center;"><input type="submit" onclick="fillCharts()"></input>
+        <div id ="submit-button" style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>
+        <br/>
+        <div id = "view-month">
         <button onclick="fillMonth()">View Month</button>
-        <button onclick="fillCharts()">View Week</button></div>
-        
-
+        </div>
+        <br/>
+        <div id = "view-week">
+        <button id = "view-week" onclick="fillCharts()">View Week</button>
+        </div>
 
         <div id="curve_chart" style="width: 500px; height: 200px"></div>
         <div id="curve_chart2" style="width: 500px; height: 200px"></div>
