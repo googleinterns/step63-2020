@@ -102,6 +102,15 @@ label{
 #submit-button {
     padding-top: 10%;
 }
+#view-month{
+    padding-top: 0%;
+    text-align: center;
+}
+#view-week{
+    padding-top: 0%;
+    text-align: center;
+}
 #charts {
-    padding-top: 5%;
+    padding-top: 1%;
+    text-align: center;
 }
