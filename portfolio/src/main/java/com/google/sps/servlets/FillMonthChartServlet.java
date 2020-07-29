@@ -36,7 +36,6 @@ public class FillMonthChartServlet extends HttpServlet {
         String userProperty = "";
         String userNickname = user.getNickname();
         Query query = new Query("input").addSort("input", SortDirection.DESCENDING);
-        query.setFilter(new FilterPredicate("User", FilterOperator.EQUAL, userNickname));
         PreparedQuery results = datastore.prepare(query);
         int limit =0;
         if(results.countEntities() < 62){
@@ -48,13 +47,16 @@ public class FillMonthChartServlet extends HttpServlet {
 
         //Writes properties specific to the current user to /fill-charts to be fetched
         for(Entity entity:results.asIterable(FetchOptions.Builder.withLimit(limit))){
-            try{
-                Key oldKey = entity.getKey();
-                Entity oldEntity = datastore.get(oldKey);
-                String data = (String)oldEntity.getProperty("input");
-                allProperties.add(data);
-        }
-            catch(EntityNotFoundException e){}
+            userProperty = (String)entity.getProperty("User");
+            if(userProperty.equals(userNickname)){
+                try{
+                    Key oldKey = entity.getKey();
+                    Entity oldEntity = datastore.get(oldKey);
+                    String data = (String)oldEntity.getProperty("input");
+                    allProperties.add(data);
+            }
+                catch(EntityNotFoundException e){}
+            }
         }
     }
         response.getWriter().println(allProperties);
