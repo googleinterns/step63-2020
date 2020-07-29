@@ -1,4 +1,4 @@
-
+////                
 //wk3pt6
 
 //fetches comment array from data servlet and inserts comments into html
