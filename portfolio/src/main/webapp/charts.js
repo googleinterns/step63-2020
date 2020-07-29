@@ -14,7 +14,8 @@ function drawMoodChart(arr) {
   var options = {
     title: 'Mood Progression',
     curveType: 'function',
-    legend: { position: 'bottom' }
+    legend: { position: 'bottom' },
+    vAxis: { ticks: [1,2,3,4,5] }
   };
 
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
@@ -34,7 +35,8 @@ function drawRelationChart(arr) {
   var options = {
     title: 'Relationship Progression',
     curveType: 'function',
-    legend: { position: 'bottom' }
+    legend: { position: 'bottom' },
+    vAxis: { ticks: [1,2,3,4,5] }
   };
 
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
