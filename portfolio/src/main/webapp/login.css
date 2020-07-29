@@ -43,3 +43,12 @@ body {
  a:link {
     text-decoration: none;
  }
+ #welcome {
+     text-align: center;
+     font-size: 200px;
+     color: white;
+     font-family: 'Meddon', cursive;
+     padding-top: 5%;
+     text-shadow: 2px 2px 4px #000000;
+
+ }
