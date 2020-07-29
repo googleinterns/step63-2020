@@ -49,12 +49,22 @@ a{
 
 #resources{
     text-align: center;
+    text-decoration: none;
 }
-#address{
+#address-container{
     text-align: center;
-    padding-left: 20%;
+    padding-left: 70%;
+    
 }
 #submit{
     text-align: center;
-    padding-top: 20%;
+    padding-left: 70%;
+}
+#therapists-header{
+    text-align: center;
+    padding-left: 70%;
+}
+#address{
+    padding-left: 70%;
+    text-align: center;
 }

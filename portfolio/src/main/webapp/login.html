@@ -17,9 +17,27 @@ E0706 16:06:31.452804 2163827 loas_util.cc:489] NOT_FOUND: No user creds availab
     <script src="login.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Meddon&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./images/login-favicon.png" />
   </head>
   <body>
+    	<ul class="icon">
+		<li><a class="long-icon" href="/login.html"><img src="./images/login-selected.png" height="100" width="200"></a></li>
+		<li><a href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a>
+		</li>
+		<li><a href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
+		<li><a href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a>
+		</li>
+		<li><a href="/index.html">&nbsp;&nbsp;<img src="./images/homeicon.png" height="150" width="120"></a></li>
+	</ul>
+
+	<ul class="lorem-logo">
+		<li>&ensp;L</li>
+		<li>&nbsp;O</li>
+		<li>&ensp;R</li>
+		<li>&ensp;E</li>
+		<li>&nbsp;M</li>
+	</ul>
     <div id="welcome">Welcome</div>
-    <button type="button" onclick="revealLogin()">login</button>
+    <div id="reveal-login"><image src="./images/submit-button.png" height="250" width="500" onclick="revealLogin()" /></div>
   </body>
 </html>
