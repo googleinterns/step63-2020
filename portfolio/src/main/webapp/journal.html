@@ -43,7 +43,7 @@
 	<br/>
 	<br/>
 	<ul class="icon">
-		<li><a class="long-icon" href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+		<li><a class="long-icon" href="/login.html"><img src="./images/loginicon.png" height="100" width="200"></a></li>
 		<li><a href="/journal.html">&nbsp;&nbsp;<img src="./images/journal-selected.png" height="120" width="120"></a>
 		</li>
 		<li><a href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
@@ -59,6 +59,7 @@
 		<li>&ensp;E</li>
 		<li>&nbsp;M</li>
 	</ul>
+    
 	<form action="/journal" method="POST">
 
 		<!--TODO: Fix date spacing so it relies on margin % instead of in-line spaces-->
@@ -83,21 +84,210 @@
 		<audio id="affirm1" src="./audio/affirm1.mp3"></audio>
 		<!--TODO make history button go to history tag so user does not have to scroll -->
 		<ul id="history"></ul>
+    
+    <script src="server.js"></script>
+    <script src="require.js"></script>
 
-    <audio id="player" controls></audio>
+    <!-- Record and Saving Example Found at: 
+    https://github.com/bryanjenningz/record-audio/blob/master/record-server-example/public/index.html -->
+
+    <div id= "audio-tools">
+    <button id="record">Record</button>
+    <button id="stop" disabled>Stop</button>
+    <button id="play" disabled>Play</button>
+    <button id="save" disabled>Submit</button>
+    </div>
+
+    <div id="saved-audio-messages">
+      <h2>Saved messages</h2>
+    </div>
+
     <script>
-    const player = document.getElementById('player');
+      const recordAudio = () =>
+        new Promise(async resolve => {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const mediaRecorder = new MediaRecorder(stream);
+          let audioChunks = [];
 
-    const handleSuccess = function(stream) {
-        if (window.URL) {
-        player.srcObject = stream;
-        } else {
-        player.src = stream;
+          mediaRecorder.addEventListener('dataavailable', event => {
+            audioChunks.push(event.data);
+          });
+
+          const start = () => {
+            audioChunks = [];
+            mediaRecorder.start();
+          };
+
+          const stop = () =>
+            new Promise(resolve => {
+              mediaRecorder.addEventListener('stop', () => {
+                const audioBlob = new Blob(audioChunks);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                const blobDataInMP3Format = new Blob([audioBlob], { type : 'audio/mp3; codecs=0' });
+                console.log(blobDataInMP3Format);
+                const play = () => audio.play();
+                resolve({ audioChunks, audioBlob, audioUrl, play });
+              });
+
+              mediaRecorder.stop();
+            });
+
+          resolve({ start, stop });
+        });
+
+      const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+      const recordButton = document.querySelector('#record');
+      const stopButton = document.querySelector('#stop');
+      const playButton = document.querySelector('#play');
+      const saveButton = document.querySelector('#save');
+      const savedAudioMessagesContainer = document.querySelector('#saved-audio-messages');
+
+      let recorder;
+      let audio;
+
+      recordButton.addEventListener('click', async () => {
+        recordButton.setAttribute('disabled', true);
+        stopButton.removeAttribute('disabled');
+        playButton.setAttribute('disabled', true);
+        saveButton.setAttribute('disabled', true);
+        if (!recorder) {
+          recorder = await recordAudio();
         }
-    };
+        recorder.start();
+      });
 
-    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        .then(handleSuccess);
+      stopButton.addEventListener('click', async () => {
+        recordButton.removeAttribute('disabled');
+        stopButton.setAttribute('disabled', true);
+        playButton.removeAttribute('disabled');
+        saveButton.removeAttribute('disabled');
+        audio = await recorder.stop();
+      });
+
+      playButton.addEventListener('click', () => {
+        audio.play();
+      });
+      
+      saveButton.addEventListener('click', () => {
+
+        const blobDataInWavFormat = new Blob([audio.audioBlob], { type : 'audio/wav; codecs=0' });
+
+
+        const audioFile = blobDataInWavFormat;
+
+        console.log(audioFile);
+
+    fetch('/speech?speech-input=' + audioFile).then(response => response.text()).then((comment) => {
+        comment = comment.replace(/\\[|\\]|"/g, "").split(",")
+        for (i = 0; i < comment.length - 2; i++) {
+
+            const breakElement = document.createElement("br");
+
+            if (comment[i].slice(0, 2) != "0." && comment[i].slice(0, 3) != "-0." && comment[i] != "null" && comment[i] != "\\r") {
+
+                if (i + 1 == comment.length - 2) {
+                    const listElement = document.createElement('li');
+                    listElement.innerText = comment[i];
+                } else if (i < comment.length - 2) {
+                    document.getElementById("history").appendChild(createListElement(comment[i], comment[i + 1]));
+                }
+
+                document.getElementById("history").appendChild(breakElement);
+                document.getElementById("history").appendChild(breakElement);
+
+            }
+            
+            if (comments[i] = "NEW ENTRY") {
+                document.getElementById("history").appendChild(breakElement);
+                document.getElementById("history").appendChild(breakElement);
+                document.getElementById("history").appendChild(breakElement);
+                document.getElementById("history").appendChild(breakElement);
+            }
+
+
+        }
+
+    });
+
+
+
+
+
+/** Creates an <li> element containing text. */
+function createListElement(text, nextElement) {
+    const liElement = document.createElement('li');
+    liElement.innerText = text;
+    if (nextElement.slice(0, 2) == "0." | nextElement.slice(0, 3) == "-0.") {
+        var score = parseFloat(nextElement);
+        if (score < -0.7) {
+            liElement.id = "dark-red";
+        } else if (score < -0.25) {
+            liElement.id = "red";
+        } else if (score < 0.0) {
+            liElement.id = "yellow";
+        } else if (score == 0.0) {
+            liElement.id = "grey";
+        } else if (score < 0.25) {
+            liElement.id = "light-blue";
+        } else if (score < 0.7) {
+            liElement.id = "light-green";
+        } else if (score > 0.7) {
+            liElement.id = "green";
+        }
+    }
+    return liElement;
+}
+
+
+        //const dataUrl = URL.createObjectURL(blobDataInWavFormat);
+        
+        
+        const reader = new FileReader();
+
+        reader.readAsDataURL(audio.audioBlob);
+        reader.onload = () => {
+          const base64AudioMessage = reader.result.split(',')[1];
+
+          fetch('/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: base64AudioMessage })
+          }).then(res => {
+            if (res.status === 201) {
+              return populateAudioMessages();
+            }
+            console.log('Invalid status saving audio message: ' + res.status);
+          });
+        };
+      
+});      
+
+      
+      
+      const populateAudioMessages = () => {
+        return fetch('/messages').then(res => {
+          if (res.status === 200) {
+            return res.json().then(json => {
+              json.messageFilenames.forEach(filename => {
+                let audioElement = document.querySelector(`[data-audio-filename="${filename}"]`);
+                if (!audioElement) {
+                  audioElement = document.createElement('audio');
+                  audioElement.src = `/messages/${filename}`;
+                  audioElement.setAttribute('data-audio-filename', filename);
+                  audioElement.setAttribute('controls', true);
+                  savedAudioMessagesContainer.appendChild(audioElement);
+                }
+              });
+            });
+          }
+          console.log('Invalid status getting messages: ' + res.status);
+        });
+      };
+      
+
+      populateAudioMessages();
     </script>
     
 </body>
