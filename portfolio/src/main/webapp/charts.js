@@ -4,11 +4,21 @@ google.charts.load('current', {'packages':['corechart']});
 
 
 //Draws the chart that tracks the user's mood
-function drawMoodChart(arr) {
+function drawMoodChart(arr,type) {
   if(arr.length == 0){
       noData("curve_chart");
   }
   else{
+      var s = arr.slice(0,1);
+      if(type == "week" && arr.length > 8){
+
+         arr = s.concat(arr.slice(arr.length-7, arr.length));
+      }
+      else if(type == "month" && arr.length > 31){
+         arr= s.concat(arr.slice(arr.length - 30,arr.length));
+      }
+      console.log(type + " " + arr.length);
+      console.log(arr);
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
@@ -25,11 +35,19 @@ function drawMoodChart(arr) {
 }
 
 //Draws the chart that tracks the user's friends&family relationships
-function drawRelationChart(arr) {
+function drawRelationChart(arr,type) {
   if(arr.length == 0){
       noData("curve_chart2");
   }
   else{
+      var s = arr.slice(0,1);
+      if(type == "week" && arr.length > 8){
+
+         arr = s.concat(arr.slice(arr.length-7, arr.length));
+      }
+      else if(type == "month" && arr.length > 31){
+         arr= s.concat(arr.slice(arr.length - 30,arr.length));
+      }
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
@@ -56,7 +74,7 @@ function addChoice(value,name){
 function fillCharts(){
     fetch('/fill-charts').then(response => response.json()).then((properties)=>{
 
-        inputData(properties);
+        inputData(properties, "week");
 
 
     });
@@ -97,11 +115,11 @@ function noData(id){
 
 function fillMonth(){
     fetch('/fillMonth').then(response => response.json()).then((properties)=>{
-        inputData(properties)
+        inputData(properties, "month")
     });
 }
 
-function inputData(properties){
+function inputData(properties, type){
     var Q1Array = [];
     var Q2Array = [];
     if(properties.length != 0){
@@ -123,6 +141,6 @@ function inputData(properties){
         finalPrep(Q1Array);
         finalPrep(Q2Array);
     }
-    drawMoodChart(Q1Array);
-    drawRelationChart(Q2Array);
+    drawMoodChart(Q1Array,type);
+    drawRelationChart(Q2Array,type);
 }

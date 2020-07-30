@@ -32,15 +32,9 @@ public class FillChartServlet extends HttpServlet {
         User user = userService.getCurrentUser();
         String userProperty = "";
         String userNickname = user.getNickname();
-        int weekMax =0;
-        if(results.countEntities() < 16){
-            weekMax = results.countEntities();
-        }
-        else{
-            weekMax = 16;
-        }
+  
         //Writes properties specific to the current user to /fill-charts to be fetched
-        for(Entity entity:results.asIterable(FetchOptions.Builder.withLimit(weekMax))){
+        for(Entity entity:results.asIterable()){
             userProperty = (String)entity.getProperty("User");
 
             if(userProperty.equals(userNickname)){
