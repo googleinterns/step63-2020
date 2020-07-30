@@ -11,54 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-  
-function setNickname(){
-  fetch('/nickname').then(response => response.json()).then((status) => {
-    if(person.status == true){
-      document.getElementById("name").value = status.name;
-
-      window.open("/index.html");
-    }
-    else{
-      var a = document.createElement('a');  
-      var link = document.createTextNode("Log in Here"); 
-      a.appendChild(link);  
-      a.title = "Log in Here";  
-      a.href = person.url;  
-      document.body.appendChild(a);
-      window.open("/login.html");
-    }
-  });
-}
 
 function revealLogin() {
   fetch('/login').then(response => response.json()).then((person) => {
-    console.log("is user logged in? " + person.status);
     if(person.status == true){
-      var a = document.createElement('a');  
-      var link = document.createTextNode("Log out Here"); 
-      a.appendChild(link);  
-      a.title = "Log out Here";  
-      a.href = person.url;  
-      document.body.appendChild(a);
-    }
-    else if (person.status == false){
-      var a = document.createElement('a');  
-      var link = document.createTextNode("Log in Here"); 
-      a.appendChild(link);  
-      a.title = "Log in Here";  
-      a.href = person.url;  
-      document.body.appendChild(a);
-    }
-  });
-}
+      window.location.replace(person.url);
 
-function backHome(){
-  var a = document.createElement('a');  
-  var link = document.createTextNode("Home"); 
-  a.appendChild(link);  
-  a.title = "Home";  
-  a.href = index.html;  
-  // a.onclick = window.open("/index.html");
-  document.body.appendChild(a);
+      window.alert("LOGOUT SUCCESSFUL!");
+    }else{
+      window.location.replace(person.url);
+
+      var message = document.createElement("h3");
+      message.innerHTML = "HELLO " + person.name + "!";
+      document.body.appendChild(message);
+    }
+
+  });
 }
