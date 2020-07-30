@@ -96,15 +96,15 @@ public class SpeechToTextServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
     
     // Get the input from the form.
-    String input = request.getParameter("speech-input");
+    String input = request.getParameter("audio-link");
 
-    
+        List<String> response_text = new ArrayList();
+        response_text.add("Transcription");
 
         /** Demonstrates using the Speech API to transcribe an audio file. */
          // Instantiates a client
          try (SpeechClient speechClient = SpeechClient.create()) {
          
-         File audioAsWAV = new File("audio.wav");
 
          try {
         FileWriter myWriter = new FileWriter("audio.wav");
@@ -120,6 +120,7 @@ public class SpeechToTextServlet extends HttpServlet {
 
         // Reads the audio file into memory
             Path path = Paths.get(fileName);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!"+fileName);
             byte[] data = Files.readAllBytes(path);
             ByteString audioBytes = ByteString.copyFrom(data);
 
@@ -135,20 +136,24 @@ public class SpeechToTextServlet extends HttpServlet {
             // Performs speech recognition on the audio file
             RecognizeResponse recognizedResponse = speechClient.recognize(config, audio);
             List<SpeechRecognitionResult> results = recognizedResponse.getResultsList();
-
+            
             for (SpeechRecognitionResult result : results) {
                 // There can be several alternative transcripts for a given chunk of speech. Just use the
                 // first (most likely) one here.
                 SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
+                response_text.add("Transcription"+alternative.getTranscript());
+
                 System.out.printf("Transcription: %s%n", alternative.getTranscript());
             }
-            }
+        } 
         
         
 
  
     // Redirect back to the HTML page.
-    response.sendRedirect("/journal.html");
+    //response.sendRedirect("/journal.html");
+    response.setContentType("text/html;");
+    response.getWriter().println(convertToJsonUsingGsonforLists(response_text));
 
   }
 

@@ -96,6 +96,8 @@
     <button id="stop" disabled>Stop</button>
     <button id="play" disabled>Play</button>
     <button id="save" disabled>Submit</button>
+
+    <p id="audio-link"></p>
     </div>
 
     <div id="saved-audio-messages">
@@ -124,8 +126,8 @@
                 const audioBlob = new Blob(audioChunks);
                 const audioUrl = URL.createObjectURL(audioBlob);
                 const audio = new Audio(audioUrl);
-                const blobDataInMP3Format = new Blob([audioBlob], { type : 'audio/mp3; codecs=0' });
-                console.log(blobDataInMP3Format);
+                //const blobDataInMP3Format = new Blob([audioBlob], { type : 'audio/mp3; codecs=0' });
+                //console.log(blobDataInMP3Format);
                 const play = () => audio.play();
                 resolve({ audioChunks, audioBlob, audioUrl, play });
               });
@@ -172,14 +174,21 @@
       
       saveButton.addEventListener('click', () => {
 
-        const blobDataInWavFormat = new Blob([audio.audioBlob], { type : 'audio/wav; codecs=0' });
+        const blobDataInmpthreeFormat = new Blob([audio.audioBlob], { type : 'audio/mp3; codecs=0' });
 
+        const audioFile = blobDataInmpthreeFormat;
+        const audioUrl = URL.createObjectURL(audioFile);
 
-        const audioFile = blobDataInWavFormat;
+        const audioLink = document.getElementById("audio-link");
+
+        audioLink.innerText = audioUrl;
+        const formData = new FormData();
+        formData.append('audio-file', audioFile);
 
         console.log(audioFile);
+        console.log(audioUrl);
 
-    fetch('/speech?speech-input=' + audioFile).then(response => response.text()).then((comment) => {
+    fetch('/speech',{method:"POST", body: formData}).then(response => response.text()).then((comment) => {
         comment = comment.replace(/\\[|\\]|"/g, "").split(",")
         for (i = 0; i < comment.length - 2; i++) {
 
@@ -199,7 +208,7 @@
 
             }
             
-            if (comments[i] = "NEW ENTRY") {
+            if (comment[i] = "NEW ENTRY") {
                 document.getElementById("history").appendChild(breakElement);
                 document.getElementById("history").appendChild(breakElement);
                 document.getElementById("history").appendChild(breakElement);
@@ -211,7 +220,7 @@
 
     });
 
-
+      });
 
 
 
@@ -243,14 +252,14 @@ function createListElement(text, nextElement) {
 
         //const dataUrl = URL.createObjectURL(blobDataInWavFormat);
         
-        
+ /**       
         const reader = new FileReader();
 
         reader.readAsDataURL(audio.audioBlob);
         reader.onload = () => {
           const base64AudioMessage = reader.result.split(',')[1];
 
-          fetch('/messages', {
+          fetch('/speech', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: base64AudioMessage })
@@ -267,14 +276,14 @@ function createListElement(text, nextElement) {
       
       
       const populateAudioMessages = () => {
-        return fetch('/messages').then(res => {
+        return fetch('/speech').then(res => {
           if (res.status === 200) {
             return res.json().then(json => {
               json.messageFilenames.forEach(filename => {
                 let audioElement = document.querySelector(`[data-audio-filename="${filename}"]`);
                 if (!audioElement) {
                   audioElement = document.createElement('audio');
-                  audioElement.src = `/messages/${filename}`;
+                  audioElement.src = `/speech/${filename}`;
                   audioElement.setAttribute('data-audio-filename', filename);
                   audioElement.setAttribute('controls', true);
                   savedAudioMessagesContainer.appendChild(audioElement);
@@ -288,6 +297,8 @@ function createListElement(text, nextElement) {
       
 
       populateAudioMessages();
+      **/
+
     </script>
     
 </body>
