@@ -50,21 +50,35 @@ a{
 #resources{
     text-align: center;
     text-decoration: none;
+    text-shadow: 2px 2px 4px #000000;
 }
 #address-container{
     text-align: center;
-    padding-left: 70%;
+    margin-left: auto;
+    margin-right: auto;
     
 }
-#submit{
+#submit-container{
     text-align: center;
-    padding-left: 70%;
+    margin-left: auto;
+    margin-right: auto;
 }
 #therapists-header{
     text-align: center;
-    padding-left: 70%;
 }
 #address{
-    padding-left: 70%;
+
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+#resource-list{
+    text-align:center;
+    text-decoration: none;
+    list-style-type: none;
+}
+#map {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
