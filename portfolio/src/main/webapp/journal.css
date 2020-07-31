@@ -104,6 +104,7 @@ body {
   overflow: auto; /* Enable scrolling if the sidenav has too much content */
   left: 0;
   font-family: 'Poiret One', cursive;
+  text-shadow: 2px 2px 4px #000000;
 }
  a:link {
     text-decoration: none;
