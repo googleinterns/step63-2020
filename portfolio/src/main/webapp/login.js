@@ -21,9 +21,7 @@ function revealLogin() {
     }else{
       window.location.replace(person.url);
 
-      var message = document.createElement("h3");
-      message.innerHTML = "HELLO " + person.name + "!";
-      document.body.appendChild(message);
+      displayName();
     }
 
   });

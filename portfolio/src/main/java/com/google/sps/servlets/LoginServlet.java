@@ -54,23 +54,32 @@ public class LoginServlet extends HttpServlet {
     }
 
     // User is logged in and has a nickname, so the request can proceed
-    if(userService.isUserLoggedIn()) {    
-      String logoutUrl = userService.createLogoutURL("/");
-      status = true;
-      
-      person.addProperty("url", logoutUrl);
-      person.addProperty("status", status);
-      person.addProperty("name", nickname);
+    // if(userService.isUserLoggedIn()) {
+    String logoutUrl = userService.createLogoutURL("/");
+    String email = userService.getCurrentUser().getEmail();
+    String end = email.substring(email.length() - 11);
+    System.out.println(end);
 
-      response.setContentType("application/json;");
-      String statusJson = new Gson().toJson(person);
-      response.getWriter().println(statusJson);
-
-      System.out.println(statusJson);
+    if(!end.equals("@google.com")){
+      response.sendRedirect(logoutUrl);
+      return;
     }
+    
+    status = true;
+    
+    person.addProperty("url", logoutUrl);
+    person.addProperty("status", status);
+    person.addProperty("name", nickname);
 
-    response.sendRedirect("/index.html");
-    return;
+    response.setContentType("application/json;");
+    String statusJson = new Gson().toJson(person);
+    response.getWriter().println(statusJson);
+
+    System.out.println(statusJson);
+  // }
+
+  // response.sendRedirect("/index.html");
+  // return;
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
