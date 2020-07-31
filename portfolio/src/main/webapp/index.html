@@ -7,7 +7,7 @@
     <script src="script.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
   </head>
-  <body>
+  <body onload="displayName()">
     <br/>
     <br/>
     <ul class="icon" >
@@ -29,6 +29,7 @@
                user hovers over navigation link. enter. scribe. track. discover. begin.-->
     <!-- TODO: Change icon images to "icon-selected" images on hover-->
     <!--TODO: move buttons/text between margins so that functionality is accessible -->
+    <div id="name"></div>
     <div id="content">
       <button onclick="revealLogin()" id="myButton" class="float-left submit-button" >Login</button>
       <div id="greeting-container"></div>

@@ -21,10 +21,18 @@ function revealLogin() {
     }else{
       window.location.replace(person.url);
 
-      var message = document.createElement("h3");
-      message.innerHTML = "HELLO " + person.name + "!";
-      document.body.appendChild(message);
+      displayName();
     }
 
+  });
+}
+
+function displayName() {
+  fetch('/login').then(response => response.json()).then((person) => {
+    if(person.name != null){
+      var message = document.createElement("h3");
+      message.innerHTML = "HELLO " + person.name + "!";
+      document.getElementById("content").appendChild(message);
+    }
   });
 }
