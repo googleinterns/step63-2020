@@ -105,22 +105,25 @@ public class SpeechToTextServlet extends HttpServlet {
          // Instantiates a client
          try (SpeechClient speechClient = SpeechClient.create()) {
          
-
+        /**
          try {
-        FileWriter myWriter = new FileWriter("audio.wav");
+        FileWriter myWriter = new FileWriter("audio.mp3");
         myWriter.write(input);
         myWriter.close();
         System.out.println("Successfully wrote to the file.");
         }   catch (IOException e) {
         System.out.println("An error occurred.");
         }
+        **/
 
         // The path to the audio file to transcribe
-        String fileName = "audio.wav";
+        String fileName = "/home/chiamaka/step63-2030/portfolio/src/main/java/com/google/sps/servlets/audio.mp3";
 
         // Reads the audio file into memory
             Path path = Paths.get(fileName);
+
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!"+fileName);
+
             byte[] data = Files.readAllBytes(path);
             ByteString audioBytes = ByteString.copyFrom(data);
 

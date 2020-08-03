@@ -33,6 +33,7 @@
   overflow: auto; /* Enable scrolling if the sidenav has too much content */
   left: 0;
   font-family: 'Poiret One', cursive;
+  text-shadow: 2px 2px 4px #000000;
 }
 body {
  background-image:url("http://www.hoshinoresorts-magazine.com/wp-content/uploads/2018/03/facebook-6.jpg");
