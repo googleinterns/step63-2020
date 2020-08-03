@@ -1,4 +1,4 @@
-
+////                
 //wk3pt6
 
 //fetches comment array from data servlet and inserts comments into html
@@ -15,7 +15,6 @@ function populateAnalysis() {
 
             if (comments[i].slice(0, 2) != "0." && comments[i].slice(0, 3) != "-0." && comments[i] != "null" && comments[i] != "\\r") {
 
-
                 if (i + 1 == comments.length - 2) {
                     const listElement = document.createElement('li');
                     listElement.innerText = comments[i];
@@ -26,10 +25,8 @@ function populateAnalysis() {
                 document.getElementById("history").appendChild(breakElement);
                 document.getElementById("history").appendChild(breakElement);
 
-            } else {
-                const prompt = document.getElementById("prompt");
-                prompt.innerText = comments[comments.length - 2] + " " + comments[comments.length - 1];
             }
+            
             if (comments[i] = "NEW ENTRY") {
                 document.getElementById("history").appendChild(breakElement);
                 document.getElementById("history").appendChild(breakElement);
@@ -43,6 +40,8 @@ function populateAnalysis() {
     });
 
 }
+
+
 
 /** Creates an <li> element containing text. */
 function createListElement(text, nextElement) {

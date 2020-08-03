@@ -1,30 +1,31 @@
 
 google.charts.load('current', {'packages':['corechart']});
 
-const daySort = {
-    "MONDAY":1,
-    "TUESDAY":2,
-    "WEDNESDAY":3,
-    "THURSDAY":4,
-    "FRIDAY":5,
-    "SATURDAY":6,
-    "SUNDAY":7
-};
 
 
 //Draws the chart that tracks the user's mood
-function drawMoodChart(arr) {
-  console.log(arr);
+function drawMoodChart(arr,type) {
   if(arr.length == 0){
       noData("curve_chart");
   }
   else{
+      var s = arr.slice(0,1);
+      if(type == "week" && arr.length > 8){
+
+         arr = s.concat(arr.slice(arr.length-7, arr.length));
+      }
+      else if(type == "month" && arr.length > 31){
+         arr= s.concat(arr.slice(arr.length - 30,arr.length));
+      }
+      console.log(type + " " + arr.length);
+      console.log(arr);
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
     title: 'Mood Progression',
     curveType: 'function',
-    legend: { position: 'bottom' }
+    legend: { position: 'bottom' },
+    vAxis: { ticks: [1,2,3,4,5] }
   };
 
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
@@ -34,17 +35,26 @@ function drawMoodChart(arr) {
 }
 
 //Draws the chart that tracks the user's friends&family relationships
-function drawRelationChart(arr) {
+function drawRelationChart(arr,type) {
   if(arr.length == 0){
       noData("curve_chart2");
   }
   else{
+      var s = arr.slice(0,1);
+      if(type == "week" && arr.length > 8){
+
+         arr = s.concat(arr.slice(arr.length-7, arr.length));
+      }
+      else if(type == "month" && arr.length > 31){
+         arr= s.concat(arr.slice(arr.length - 30,arr.length));
+      }
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
     title: 'Relationship Progression',
     curveType: 'function',
-    legend: { position: 'bottom' }
+    legend: { position: 'bottom' },
+    vAxis: { ticks: [1,2,3,4,5] }
   };
 
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
@@ -62,32 +72,10 @@ function addChoice(value,name){
 }
 
 function fillCharts(){
-    fetch('/charts');
     fetch('/fill-charts').then(response => response.json()).then((properties)=>{
 
-        var Q1Array = [];
-        var Q2Array = [];
-        if(properties.length != 0){
+        inputData(properties, "week");
 
-            for(i=0; i<properties.length; i++){
-                var row = i;
-                var question = properties[row][2];
-                if(question == "Q1"){
-                    Q1Array.push(properties[row]);
-                }
-                else{
-                    Q2Array.push(properties[row]);
-                }
-            }
-
-
-            Q1Array = sortArray(Q1Array);
-            Q2Array = sortArray(Q2Array);
-            finalPrep(Q1Array);
-            finalPrep(Q2Array);
-    }
-        drawMoodChart(Q1Array);
-        drawRelationChart(Q2Array);
 
     });
 }
@@ -95,12 +83,12 @@ function fillCharts(){
 function sortArray(arr){
 
     arr.sort(function sortByDay(a,b){
-        var day1 = a[0];
-        var day2 = b[0];
-        if (daySort[day1] > daySort[day2]){ return 1;}
-        if (daySort[day2] > daySort[day1]){return -1;}
-        return 0;
+       var date1 = new Date(a[0].split('-'));
+       var date2 = new Date(b[0].split('-'));
+
+       return date1 - date2;
     })
+        
 
     return arr;
 }
@@ -123,4 +111,36 @@ function noData(id){
     errorMessage.style.backgroundColor= "#b68e9a";
     errorMessage.style.fontSize = "18px";
     errorMessage.style.color = "white";
+}
+
+function fillMonth(){
+    fetch('/fillMonth').then(response => response.json()).then((properties)=>{
+        inputData(properties, "month")
+    });
+}
+
+function inputData(properties, type){
+    var Q1Array = [];
+    var Q2Array = [];
+    if(properties.length != 0){
+
+        for(i=0; i<properties.length; i++){
+            var row = i;
+            var question = properties[row][2];
+            if(question == "Q1"){
+                Q1Array.push(properties[row]);
+            }
+            else{
+                Q2Array.push(properties[row]);
+            }
+        }
+
+
+        Q1Array = sortArray(Q1Array);
+        Q2Array = sortArray(Q2Array);
+        finalPrep(Q1Array);
+        finalPrep(Q2Array);
+    }
+    drawMoodChart(Q1Array,type);
+    drawRelationChart(Q2Array,type);
 }

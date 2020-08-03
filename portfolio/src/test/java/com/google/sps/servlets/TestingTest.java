@@ -2,11 +2,13 @@
 package com.google.sps;
 
 import java.util.List;
+import com.google.sps.servlets.JournalServlet;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import java.util.ArrayList;
 
 import org.mockito.Mockito;
 
@@ -34,4 +36,7 @@ public final class TestingTest {
     Mockito.verify(mockedList).add("one");
     Mockito.verify(mockedList).clear();
   }
+
+  
+  
 }

@@ -10,9 +10,9 @@
 .icon {
   list-style-type: none;
   margin: 0;
-  padding-top: 5%;
+  padding-top: 10%;
   padding: 100;
-  width: 15%;
+  width: 10%;
   height: 100%; /* Full height */
   position: fixed; /* Make it stick, even on scroll */
   overflow: auto; /* Enable scrolling if the sidenav has too much content */
@@ -23,10 +23,10 @@
 .lorem-logo {
   list-style-type: none;
   margin: 0;
-  padding-top: 2%;
+  padding-top: 5%;
   padding: 100;
   width: 15%;
-  font-size: 180px;
+  font-size: 150px;
   color: white;
   height: 100%; /* Full height */
   position: fixed; /* Make it stick, even on scroll */
@@ -43,3 +43,17 @@ body {
  a:link {
     text-decoration: none;
  }
+ #welcome {
+     text-align: center;
+     font-size: 200px;
+     color: white;
+     font-family: 'Meddon', cursive;
+     padding-top: 5%;
+     text-shadow: 2px 2px 4px #000000;
+
+ }
+
+#reveal-login {
+    text-align: center;
+    
+}

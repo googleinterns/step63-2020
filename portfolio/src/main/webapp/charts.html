@@ -6,12 +6,14 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="charts.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" href="./images/charts-favicon.png" />
     </head>
     <body onload="fillCharts()">
         <br/>
     <br/>
     <ul class="icon" >
-    <li><a class="long-icon"  href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+    <li><a class="long-icon"  href="/login.html"><img src="./images/loginicon.png" height="100" width="200"></a></li>
     <li><a  href="/journal.html">&nbsp;&nbsp;<img src="./images/journalicon.png" height="120" width="120"></a></li>
     <li><a  href="/charts.html">&nbsp;&nbsp;<img src="./images/charts-selected.png" height="120" width="120"></a></li>
     <li><a  href="/resources.html">&nbsp;&nbsp;<img src="./images/resourcesicon.png" height="120" width="120"></a></li>
@@ -38,7 +40,7 @@
         }
         else if (currentTime <= 16 ) {
             if (document.body) {
-                document.body.style.backgroundImage = "url('canyon.jpg')";
+                document.body.style.backgroundImage = "url('./images/canyon.jpg')";
             }
         }
         else if (currentTime <= 20 ) {
@@ -107,10 +109,21 @@
             <br>
 
         </div>
-        <div style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>
+        <!--<div id ="submit-button" style="text-align: center;"><input type="submit" onclick="fillCharts()"></input></div>-->
+        <div id="submit-button"><image src="./images/submit-general.png" height="100" width="250" onclick="fillCharts()" /></div>
+        <br/>
+        <div id = "view-month">
+        <button onclick="fillMonth()">View Month</button>
+        </div>
+        <br/>
+        <div id = "view-week">
+        <button id = "view-week" onclick="fillCharts()">View Week</button>
+        </div>
 
         <div id="curve_chart" style="width: 500px; height: 200px"></div>
         <div id="curve_chart2" style="width: 500px; height: 200px"></div>
+        </div>
+
 
     </body>
 </html>
