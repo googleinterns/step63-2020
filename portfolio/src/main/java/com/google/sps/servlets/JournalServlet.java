@@ -66,10 +66,14 @@ public class JournalServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    List<String> comments = new ArrayList<>();
+    
+    /**
+    if (setEmail().substring(0,10) == "google.com" | setEmail() == "chimnchuk@gmail.com") {**/
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Query sentenceQuery = new Query("Sentence").addSort("time", SortDirection.DESCENDING);
+    Query sentenceQuery = new Query("Sentence").addSort("server-time", SortDirection.DESCENDING);
     PreparedQuery sentenceResults = datastore.prepare(sentenceQuery);
 
     long submissionTime;
@@ -82,8 +86,6 @@ public class JournalServlet extends HttpServlet {
     submissionTime = 0;
     }
     
-
-    List<String> comments = new ArrayList<>();
     List<String> test = new ArrayList<>();
     String currentEmail = "";
 
@@ -108,18 +110,18 @@ public class JournalServlet extends HttpServlet {
         }
         
         if (String.valueOf(entity.getProperty("content")) != "null" | String.valueOf(entity.getProperty("sentiment-score")) != "null"){
-        comments.add(String.valueOf(entity.getProperty("content")));
         comments.add(String.valueOf(entity.getProperty("sentiment-score")));
+        comments.add(String.valueOf(entity.getProperty("content")));
         }
 
         if (String.valueOf(entity.getProperty("average-score")) != "null") {
-            comments.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
             comments.add(String.valueOf(entity.getProperty("average-score")));
+            comments.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
         }
 
         if (String.valueOf(entity.getProperty("weighted-average")) != "null") {
-            comments.add("The weighted average was :"+String.valueOf(entity.getProperty("weighted-average")));
             comments.add(String.valueOf(entity.getProperty("weighted-average")));
+            comments.add("The weighted average was :"+String.valueOf(entity.getProperty("weighted-average")));
         }
     
 
@@ -131,7 +133,7 @@ public class JournalServlet extends HttpServlet {
             if (subjectSentence.size()==2){
                 comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry." );
             } else {
-                comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry. "+subjectSentence.get(3)+"  as well.");
+                comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry. "+subjectSentence.get(2)+"  as well.");
             }
 
             comments.add("Care to talk about that?");
@@ -140,6 +142,10 @@ public class JournalServlet extends HttpServlet {
 
     }
     }
+    /**
+    } else {
+        comments.add("Because product is still in its developemental stage, access is limited to Corporate Google Accounts");
+    }*/
 
     String conversion = convertToJsonUsingGsonforLists(comments);
     response.setContentType("application/json");
@@ -151,6 +157,7 @@ public class JournalServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+   /** if (setEmail().substring(0,11) == "google.com" | setEmail() == "chimnchuk@gmail.com"){  */
     
     // Get the input from the form.
     String input = request.getParameter("journal-input");
@@ -209,6 +216,9 @@ public class JournalServlet extends HttpServlet {
         //Adds time
         sentenceEntity.setProperty("time",inputTime);
 
+        //Adds processing time
+        sentenceEntity.setProperty("server-time",System.currentTimeMillis());
+
         //Adds email
         sentenceEntity.setProperty("email",email);
 
@@ -259,6 +269,7 @@ public class JournalServlet extends HttpServlet {
     Entity scoreEntity = new Entity("Sentence");
     scoreEntity.setProperty("average-score", averageScore);
     scoreEntity.setProperty("time", inputTime);
+    scoreEntity.setProperty("server-time",System.currentTimeMillis());
     scoreEntity.setProperty("email", email);
 
     datastore.put(scoreEntity);
@@ -266,6 +277,7 @@ public class JournalServlet extends HttpServlet {
     Entity weightedScoreEntity = new Entity("Sentence");
     weightedScoreEntity.setProperty("weighted-average", weightedAverage);
     weightedScoreEntity.setProperty("time", inputTime);
+    weightedScoreEntity.setProperty("server-time",System.currentTimeMillis());
     weightedScoreEntity.setProperty("email", email);
 
     datastore.put(weightedScoreEntity);
@@ -298,6 +310,7 @@ public class JournalServlet extends HttpServlet {
     String entityNamesInJSON = convertToJsonUsingGsonforLists(getSubjects(input));
     sentenceEntity.setProperty("subjects", entityNamesInJSON);
     sentenceEntity.setProperty("time", inputTime);
+    sentenceEntity.setProperty("server-time",System.currentTimeMillis());
     sentenceEntity.setProperty("email",email);
 
     datastore.put(sentenceEntity);
@@ -305,6 +318,12 @@ public class JournalServlet extends HttpServlet {
  
     // Redirect back to the HTML page.
     response.sendRedirect("/journal.html");
+
+    /***
+    } else {
+    response.sendRedirect("/index.html");
+    }
+    */
 
   }
 
