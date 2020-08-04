@@ -1,6 +1,11 @@
 
 google.charts.load('current', {'packages':['corechart']});
-
+//var module = {};
+module.exports = {
+    sortArray: sortArray,
+    finalPrep: finalPrep,
+    weekMonthFormat: weekMonthFormat
+}
 
 
 //Draws the chart that tracks the user's mood
@@ -9,28 +14,17 @@ function drawMoodChart(arr,type) {
       noData("curve_chart");
   }
   else{
-      var s = arr.slice(0,1);
-      if(type == "week" && arr.length > 8){
+    var data = google.visualization.arrayToDataTable(arr);
+    options = {
+        title: 'Mood Progression',
+        curveType: 'function',
+        legend: { position: 'bottom' },
+        vAxis: { ticks: [1,2,3,4,5] }
+    };
+    
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
-         arr = s.concat(arr.slice(arr.length-7, arr.length));
-      }
-      else if(type == "month" && arr.length > 31){
-         arr= s.concat(arr.slice(arr.length - 30,arr.length));
-      }
-      console.log(type + " " + arr.length);
-      console.log(arr);
-  var data = google.visualization.arrayToDataTable(arr);
-
-  var options = {
-    title: 'Mood Progression',
-    curveType: 'function',
-    legend: { position: 'bottom' },
-    vAxis: { ticks: [1,2,3,4,5] }
-  };
-
-  var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-  chart.draw(data, options);
+    chart.draw(data, options);
   }
 }
 
@@ -40,14 +34,6 @@ function drawRelationChart(arr,type) {
       noData("curve_chart2");
   }
   else{
-      var s = arr.slice(0,1);
-      if(type == "week" && arr.length > 8){
-
-         arr = s.concat(arr.slice(arr.length-7, arr.length));
-      }
-      else if(type == "month" && arr.length > 31){
-         arr= s.concat(arr.slice(arr.length - 30,arr.length));
-      }
   var data = google.visualization.arrayToDataTable(arr);
 
   var options = {
@@ -80,7 +66,7 @@ function fillCharts(){
     });
 }
 
-function sortArray(arr){
+ function sortArray(arr){
 
     arr.sort(function sortByDay(a,b){
        var date1 = new Date(a[0].split('-'));
@@ -91,8 +77,7 @@ function sortArray(arr){
         
 
     return arr;
-}
-
+     };
 function finalPrep(arr){
 
     for(i =0; i<arr.length;i++){
@@ -114,7 +99,7 @@ function noData(id){
 }
 
 function fillMonth(){
-    fetch('/fillMonth').then(response => response.json()).then((properties)=>{
+    fetch('/fill-charts').then(response => response.json()).then((properties)=>{
         inputData(properties, "month")
     });
 }
@@ -140,7 +125,22 @@ function inputData(properties, type){
         Q2Array = sortArray(Q2Array);
         finalPrep(Q1Array);
         finalPrep(Q2Array);
+        
+        Q1Array =weekMonthFormat(Q1Array,type);
+        Q2Array =weekMonthFormat(Q2Array,type);
     }
     drawMoodChart(Q1Array,type);
     drawRelationChart(Q2Array,type);
+}
+
+function weekMonthFormat(arr,type){
+      var s = arr.slice(0,1);
+      if(type == "week" && arr.length > 8){
+
+         arr = s.concat(arr.slice(arr.length-7, arr.length));
+      }
+      else if(type == "month" && arr.length > 31){
+         arr= s.concat(arr.slice(arr.length - 30,arr.length));
+      }
+      return arr;
 }
