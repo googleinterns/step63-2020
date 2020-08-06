@@ -1,0 +1,28 @@
+{
+  "name": "step63-2020",
+  "version": "1.0.0",
+  "description": "After attending the “Who Do You Build For?” class, my podmates and I were left with the questions “Who do we build for? Who are we intending to help by the end of this?”. We all came to the conclusion that we wanted to help destigmatize the topic of mental health, especially for teens living in communities of color. In those communities, many teens are not comfortable with bringing up the topic of mental health because the adults around them make fun of and belittle the idea of mental health. They invalidate and are blind to the feelings of those around them, leaving them to struggle in silence and create toxic environments.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --recursive portfolio/src/main/webapp/*test*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/googleinterns/step63-2020.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/googleinterns/step63-2020/issues"
+  },
+  "homepage": "https://github.com/googleinterns/step63-2020#readme",
+  "dependencies": {
+    "@google-cloud/speech": "^4.1.1",
+    "express": "^4.17.1",
+    "mocha": "^8.0.1",
+    "uuid": "^8.3.0"
+  }
+}

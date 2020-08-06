@@ -177,85 +177,25 @@
       
       saveButton.addEventListener('click', () => {
 
-        const blobDataInmpthreeFormat = new Blob([audio.audioBlob], { type : 'audio/mp3; codecs=0' });
+        const blobData = new Blob([audio.audioBlob], { type : 'audio/mp3; codecs=0' });
 
-        const audioFile = blobDataInmpthreeFormat;
+        const audioFile = blobData;
         const audioUrl = URL.createObjectURL(audioFile);
 
         const audioLink = document.getElementById("audio-link");
 
-        audioLink.innerText = audioUrl;
+        //audioLink.innerText = audioUrl;
         const formData = new FormData();
         formData.append('audio-file', audioFile);
 
         console.log(audioFile);
         console.log(audioUrl);
-
-    fetch('/speech',{method:"POST", body: formData}).then(response => response.text()).then((comment) => {
-        comment = comment.replace(/\\[|\\]|"/g, "").split(",")
-        for (i = 0; i < comment.length - 2; i++) {
-
-            const breakElement = document.createElement("br");
-
-            if (comment[i].slice(0, 2) != "0." && comment[i].slice(0, 3) != "-0." && comment[i] != "null" && comment[i] != "\\r") {
-
-                if (i + 1 == comment.length - 2) {
-                    const listElement = document.createElement('li');
-                    listElement.innerText = comment[i];
-                } else if (i < comment.length - 2) {
-                    document.getElementById("history").appendChild(createListElement(comment[i], comment[i + 1]));
-                }
-
-                document.getElementById("history").appendChild(breakElement);
-                document.getElementById("history").appendChild(breakElement);
-
-            }
-            
-            if (comment[i] = "NEW ENTRY") {
-                document.getElementById("history").appendChild(breakElement);
-                document.getElementById("history").appendChild(breakElement);
-                document.getElementById("history").appendChild(breakElement);
-                document.getElementById("history").appendChild(breakElement);
-            }
-
-
-        }
-
-    });
-
       });
 
-
-
-/** Creates an <li> element containing text. */
-function createListElement(text, nextElement) {
-    const liElement = document.createElement('li');
-    liElement.innerText = text;
-    if (nextElement.slice(0, 2) == "0." | nextElement.slice(0, 3) == "-0.") {
-        var score = parseFloat(nextElement);
-        if (score < -0.7) {
-            liElement.id = "dark-red";
-        } else if (score < -0.25) {
-            liElement.id = "red";
-        } else if (score < 0.0) {
-            liElement.id = "yellow";
-        } else if (score == 0.0) {
-            liElement.id = "grey";
-        } else if (score < 0.25) {
-            liElement.id = "light-blue";
-        } else if (score < 0.7) {
-            liElement.id = "light-green";
-        } else if (score > 0.7) {
-            liElement.id = "green";
-        }
-    }
-    return liElement;
-}
-
-
-        //const dataUrl = URL.createObjectURL(blobDataInWavFormat);
+/**
+        const dataUrl = URL.createObjectURL(blobData);
         
- /**       
+       
         const reader = new FileReader();
 
         reader.readAsDataURL(audio.audioBlob);
