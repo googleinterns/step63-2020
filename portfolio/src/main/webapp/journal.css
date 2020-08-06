@@ -1,6 +1,8 @@
 #textarea {
     text-align:center;
     padding-left: 5%;
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 1px 1px 2px #000000;  
 }
 textarea[type="text"]
 {
@@ -11,62 +13,84 @@ textarea[type="text"]
     border: dotted 2px white;
     border-color: white;
     outline: none;
+    border-radius: 25px;
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 1px 1px 2px #000000;  
 
 }
 #history {
-    text-align: center;
     color: white;
+    padding-left:20%;
+    font-size:50px;
+    text-shadow: 1px 1px 2px #000000;   
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.7;
+
 }
 #time {
-    font-size:60px;
+    text-align: center;
+    padding-left: 40%;
+    padding-top:1%;
+    font-size:70px;
     color: white;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cinzel Decorative', cursive;
+    text-shadow: 2px 2px 4px #000000;
 }
 #prompt {
     font-size:30px;
     color: white;
 }
 #dark-red {
-
-  font-size: 25px;
   background-color: #C70039;
-  color: white;
 }
 #red {
-
-  font-size: 25px;
   background-color: #E94522;
-  color: white;
 }
 #yellow {
-
-  font-size: 25px;
   background-color: #FFC300;
-  color: #684F0B;
 }
 #grey {
-
-  font-size: 25px;
   background-color: #CACACA;
-  color: #4B4B4B;
 }
 #light-blue {
-
-  font-size: 25px;
   background-color: #B5D9FF;
-  color: #004B9A;
 }
 #light-green {
-
-  font-size: 25px;
   background-color: #DAF7A6;
-  color: #1B650E;
+
 }
 #green {
-
-  font-size: 25px;
   background-color: #1AAB00;
-  color: white;
+}
+
+#dark-red-score {
+  color: #C70039;
+  font-size:100px;
+}
+#red-score {
+  color: #E94522;
+  font-size:100px;
+}
+#yellow-score {
+  color: #FFC300;
+  font-size:100px;
+}
+#grey-score {
+  color: #CACACA;
+  font-size:100px;
+}
+#light-blue-score {
+  color: #B5D9FF;
+  font-size:100px;
+}
+#light-green-score {
+  color: #DAF7A6;
+  font-size:100px;
+
+}
+#green-score {
+  color: #1AAB00;
+  font-size:100px;
 }
 body {
  background-image:url("https://eskipaper.com/images/forest-background-7.jpg");
@@ -104,6 +128,7 @@ body {
   overflow: auto; /* Enable scrolling if the sidenav has too much content */
   left: 0;
   font-family: 'Poiret One', cursive;
+  text-shadow: 2px 2px 4px #000000;
 }
  a:link {
     text-decoration: none;
@@ -113,4 +138,23 @@ body {
  }
  #noise{
     padding-left: 75%;
+ }
+ #player{
+    padding-left: 50%;
+ }
+ #recorder{
+    padding-left: 50%
+ }
+ #audio-tools{
+    text-align:center;
+ }
+ #entry-text {
+    padding-left: 2%;
+    padding-right: 2%;
+    border-radius: 25px;
+    border: 2px solid white;
+    width: 70%;
+    padding-top:5%;
+    padding-bottom:5%;
+    
  }

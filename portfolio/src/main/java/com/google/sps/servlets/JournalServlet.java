@@ -66,10 +66,14 @@ public class JournalServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    List<String> comments = new ArrayList<>();
+    
+    
+    if (setEmail().substring(setEmail().length()-10,setEmail().length()).equals("google.com") | setEmail().equals("chimnchuk@gmail.com") | setEmail().equals("erysd.school@gmail.com") | setEmail().equals("ericas12145@gmail.com")) {
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Query sentenceQuery = new Query("Sentence").addSort("time", SortDirection.DESCENDING);
+    Query sentenceQuery = new Query("Sentence").addSort("server-time", SortDirection.DESCENDING);
     PreparedQuery sentenceResults = datastore.prepare(sentenceQuery);
 
     long submissionTime;
@@ -82,45 +86,66 @@ public class JournalServlet extends HttpServlet {
     submissionTime = 0;
     }
     
+    List<String> test = new ArrayList<>();
+    String currentEmail = "";
 
-    List<String> comments = new ArrayList<>();
     comments.add("NEW ENTRY");
-    comments.add(String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("email"))); 
+    UserService service =  UserServiceFactory.getUserService();
+        User user = service.getCurrentUser();
+        if (service.isUserLoggedIn()) {
+            currentEmail = user.getEmail(); 
+        } else {
+            currentEmail = "no email found";
+        }
+    comments.add(currentEmail);
+    
+
     for (Entity entity : sentenceResults.asIterable()) {
 
+        if ((entity.getProperty("email") != "null") && (String.valueOf(entity.getProperty("email")).equals(currentEmail))) {
         
         if (submissionTime != Long.valueOf(String.valueOf(entity.getProperty("time")))){
             submissionTime = Long.valueOf(String.valueOf(entity.getProperty("time")));
             comments.add("NEW ENTRY");
-            if (String.valueOf(entity.getProperty("email")) != "null"){
-            comments.add(String.valueOf(entity.getProperty("email"))); 
-            }
         }
         
         if (String.valueOf(entity.getProperty("content")) != "null" | String.valueOf(entity.getProperty("sentiment-score")) != "null"){
-        comments.add(String.valueOf(entity.getProperty("content")));
         comments.add(String.valueOf(entity.getProperty("sentiment-score")));
+        comments.add(String.valueOf(entity.getProperty("content")));
         }
 
         if (String.valueOf(entity.getProperty("average-score")) != "null") {
-            comments.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
             comments.add(String.valueOf(entity.getProperty("average-score")));
+            comments.add("The average score was :"+String.valueOf(entity.getProperty("average-score")));
         }
+
+        if (String.valueOf(entity.getProperty("weighted-average")) != "null") {
+            comments.add(String.valueOf(entity.getProperty("weighted-average")));
+            comments.add("The weighted average was :"+String.valueOf(entity.getProperty("weighted-average")));
+        }
+    
+
+
+        if (String.valueOf(entity.getProperty("subjects")) != "null"){
+            String [] subject = String.valueOf(entity.getProperty("subjects")).split(",");
+            List<String> subjectSentence = new ArrayList<String>(Arrays.asList(subject));
+
+            if (subjectSentence.size()==2){
+                comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry." );
+            } else {
+                comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry. "+subjectSentence.get(2)+"  as well.");
+            }
+
+            comments.add("Care to talk about that?");
+
+         }
+
     }
-
-    if (String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("subjects")) != "null"){
-        String [] subject = String.valueOf(sentenceResults.asIterable().iterator().next().getProperty("subjects")).split(",");
-        List<String> subjectSentence = new ArrayList<String>(Arrays.asList(subject));
-
-        if (subjectSentence.size()==2){
-            comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry." );
-        } else {
-            comments.add("It seems like "+subjectSentence.get(0)+" was the most important thing in your last entry. "+subjectSentence.get(3)+"  as well.");
-        }
-
-        comments.add("Care to talk about that?");
-
-        }
+    }
+    
+    } else {
+        comments.add("Because product is still in its developemental stage, access is limited to Corporate Google Accounts");
+    }
 
     String conversion = convertToJsonUsingGsonforLists(comments);
     response.setContentType("application/json");
@@ -132,6 +157,7 @@ public class JournalServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+   if (setEmail().substring(setEmail().length()-10,setEmail().length()).equals("google.com") | setEmail().equals("chimnchuk@gmail.com") | setEmail().equals("erysd.school@gmail.com") | setEmail().equals("ericas12145@gmail.com")){  
     
     // Get the input from the form.
     String input = request.getParameter("journal-input");
@@ -159,17 +185,24 @@ public class JournalServlet extends HttpServlet {
 
     //Creates new Sentence Entity
 
-    //Iterates over list of sentences and creates sentence object 
-    String email = "";
+    //Iterates over list of sentences and creates sentence object
+
+    String email = setEmail();
+    
+    List<String> wtAvg = new ArrayList<>();
+
+
+
     for (int i= 0; i < entryBySentence.size(); i++) {
 
         if (entryBySentence.get(i) != "/r") {
 
-        Entity sentenceEntity = new Entity("Sentence");
+        //Entity sentenceEntity = new Entity("Sentence");
 
         // Adds sentence string
-        sentenceEntity.setProperty("content",entryBySentence.get(i));
+        //sentenceEntity.setProperty("content",entryBySentence.get(i));
 
+        /**
         // calculate sentiment analysis score
         Document doc =
             Document.newBuilder().setContent(entryBySentence.get(i)).setType(Document.Type.PLAIN_TEXT).build();
@@ -177,27 +210,29 @@ public class JournalServlet extends HttpServlet {
         Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
         float sentScore = sentiment.getScore();
         languageService.close();
+        **/
+
+        datastore.put(createSentenceEntity(inputTime,entryBySentence.get(i)));
 
         //Adds sentiment score for particular sentence
-        sentenceEntity.setProperty("sentiment-score",sentScore);
+        //sentenceEntity.setProperty("sentiment-score",getSentimentScore(entryBySentence.get(i)));
 
         //Adds time
-        sentenceEntity.setProperty("time",inputTime);
+        //sentenceEntity.setProperty("time",inputTime);
+
+        //Adds processing time
+        //sentenceEntity.setProperty("server-time",System.currentTimeMillis());
 
         //Adds email
-        sentenceEntity.setProperty("email","no email found");
+        //sentenceEntity.setProperty("email",email);
 
-        UserService service =  UserServiceFactory.getUserService();
-        User user = service.getCurrentUser();
-        if (service.isUserLoggedIn()) {
-        sentenceEntity.setProperty("email",user.getEmail());
-        email = user.getEmail();
-        }
         //Stores sentence
-        datastore.put(sentenceEntity);
+        //datastore.put(sentenceEntity);
         
-        averageScore += sentScore ;
-        weightedAverage += sentScore*((entryBySentence.get(i).length())/entrySize);
+        averageScore += getSentimentScore(entryBySentence.get(i)) ;
+
+        weightedAverage += getSentimentScore(entryBySentence.get(i))*((float)(entryBySentence.get(i).length())/entrySize);
+
         } else {
             charsIgnored += 1;
         }
@@ -205,14 +240,68 @@ public class JournalServlet extends HttpServlet {
 
     averageScore /= ((entryBySentence.size()-charsIgnored));
 
-    Entity scoreEntity = new Entity("Sentence");
 
+    Entity scoreEntity = new Entity("Sentence");
     scoreEntity.setProperty("average-score", averageScore);
+    scoreEntity.setProperty("time", inputTime);
+    scoreEntity.setProperty("server-time",System.currentTimeMillis());
+    scoreEntity.setProperty("email", email);
 
     datastore.put(scoreEntity);
 
+    Entity weightedScoreEntity = new Entity("Sentence");
+    weightedScoreEntity.setProperty("weighted-average", weightedAverage);
+    weightedScoreEntity.setProperty("time", inputTime);
+    weightedScoreEntity.setProperty("server-time",System.currentTimeMillis());
+    weightedScoreEntity.setProperty("email", email);
+
+    datastore.put(weightedScoreEntity);
+    
+    //subjectEntity
+    Entity sentenceEntity = new Entity("Sentence");
+
+    
+    String entityNamesInJSON = convertToJsonUsingGsonforLists(getSubjects(input));
+    sentenceEntity.setProperty("subjects", entityNamesInJSON);
+    sentenceEntity.setProperty("time", inputTime);
+    sentenceEntity.setProperty("server-time",System.currentTimeMillis());
+    sentenceEntity.setProperty("email",email);
     
 
+    datastore.put(sentenceEntity);
+
+ 
+    // Redirect back to the HTML page.
+    response.sendRedirect("/journal.html");
+
+    
+    } else {
+    response.sendRedirect("/index.html");
+    }
+
+
+  }
+
+    private String convertToJsonUsingGsonforLists(List<String> messages) {
+        Gson gson = new Gson();
+        String json = gson.toJson(messages);
+        return json;
+  }
+
+    public String setEmail() {
+        String email = "";
+        UserService service =  UserServiceFactory.getUserService();
+        User user = service.getCurrentUser();
+        if (service.isUserLoggedIn()) {
+            email = user.getEmail(); 
+        } else {
+            email = "no email found";
+        }
+
+        return email;
+  }
+  private List<String> getEntityAnalysis(String input){
+    
     List<String> entityNameSalianceAndType = new ArrayList<>();
 
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
@@ -230,55 +319,87 @@ public class JournalServlet extends HttpServlet {
             entityNameSalianceAndType.add(entity.getName());
             entityNameSalianceAndType.add(String.valueOf(entity.getSalience()));
             //entityAnalysis.add("Metadata: ");
-            /**for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
-            entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
-            }*/
-            for (EntityMention mention : entity.getMentionsList()) {
+            //for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
+            //entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
+            //}
+        for (EntityMention mention : entity.getMentionsList()) {
             //entityAnalysis.add("Begin offset: %d\n"+mention.getText().getBeginOffset());
             //entityContent.add("Content: %s\n"+mention.getText().getContent());
             entityNameSalianceAndType.add(String.valueOf(mention.getType()));
             }
         }
+
+    } catch (IOException e) {
+
     }
+    return entityNameSalianceAndType;
+  }
+
+  
+  private List<String> getSubjects(String inputString){
     
-    //subjectEntity
-    Entity sentenceEntity = new Entity("Sentence");
+    List<String> entityNameSalianceAndType = getEntityAnalysis(inputString);
 
     List mostImportant = new ArrayList();
 
-    if (entityNameSalianceAndType.size()== 3 | entityNameSalianceAndType.size()== 4) {
-        mostImportant.add(entityNameSalianceAndType.get(0));
-        mostImportant.add(entityNameSalianceAndType.get(1));
-
-    } else if (entityNameSalianceAndType.size() <3) {
+    if (entityNameSalianceAndType.size() <3) {
         mostImportant.add("nothing");
-        mostImportant.add("0");
+        mostImportant.add("0.");
     }
     
-    else{
+    else if ((entityNameSalianceAndType.size())%3 == 1) {
+        mostImportant.add(entityNameSalianceAndType.get(0));
+    }
+    else {
         mostImportant.add(entityNameSalianceAndType.get(0));
         mostImportant.add(entityNameSalianceAndType.get(1));
         mostImportant.add(entityNameSalianceAndType.get(2));
-        mostImportant.add(entityNameSalianceAndType.get(3));
     }
-    String entityNamesInJSON = convertToJsonUsingGsonforLists(mostImportant);
-    sentenceEntity.setProperty("subjects", entityNamesInJSON);
-    sentenceEntity.setProperty("time", inputTime);
-    sentenceEntity.setProperty("email",email);
 
-    datastore.put(sentenceEntity);
+    return mostImportant;
 
- 
-    // Redirect back to the HTML page.
-    response.sendRedirect("/journal.html");
 
   }
 
-    private String convertToJsonUsingGsonforLists(List<String> messages) {
-    Gson gson = new Gson();
-    String json = gson.toJson(messages);
-    return json;
+  public float getSentimentScore(String input) {
+      try {
+      Document doc =
+            Document.newBuilder().setContent(input).setType(Document.Type.PLAIN_TEXT).build();
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        float sentScore = sentiment.getScore();
+        languageService.close();
+
+        return sentScore;
+      } catch (IOException e){
+          return 0;
+      }
   }
+
+  public Entity createSentenceEntity(long inputTime, String sentence){
+
+        //Instantiates Sentence Entity
+        Entity sentenceEntity = new Entity("Sentence");
+
+        sentenceEntity.setProperty("content",sentence);
+
+        //Adds sentiment score for particular sentence
+        sentenceEntity.setProperty("sentiment-score",getSentimentScore(sentence));
+
+        //Adds time
+        sentenceEntity.setProperty("time",inputTime);
+
+        //Adds processing time
+        sentenceEntity.setProperty("server-time",System.currentTimeMillis());
+
+        //Adds email
+        sentenceEntity.setProperty("email",setEmail());
+
+        return sentenceEntity;
+
+  }
+  
+
 
  
 }

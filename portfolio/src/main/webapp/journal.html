@@ -8,10 +8,12 @@
 	<title>Journal</title>
 	<meta name="description" content="The HTML5 Herald">
 	<meta name="author" content="SitePoint">
-
-	<link rel="stylesheet" href="journal.css">
+    <link rel="stylesheet" href="journal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./images/journal-favicon.png" />
 </head>
 
 <body>
@@ -42,7 +44,7 @@
 	<br/>
 	<br/>
 	<ul class="icon">
-		<li><a class="long-icon" href="/login"><img src="./images/loginicon.png" height="100" width="200"></a></li>
+		<li><a class="long-icon" href="/login.html"><img src="./images/loginicon.png" height="100" width="200"></a></li>
 		<li><a href="/journal.html">&nbsp;&nbsp;<img src="./images/journal-selected.png" height="120" width="120"></a>
 		</li>
 		<li><a href="/charts.html">&nbsp;&nbsp;<img src="./images/chartsicon.png" height="120" width="120"></a></li>
@@ -58,6 +60,7 @@
 		<li>&ensp;E</li>
 		<li>&nbsp;M</li>
 	</ul>
+    
 	<form action="/journal" method="POST">
 
 		<!--TODO: Fix date spacing so it relies on margin % instead of in-line spaces-->
@@ -65,7 +68,7 @@
 		<span id="time"></span>
 		<div id="prompt"></div>
 		<div id="textarea">
-			<textarea name ="journal-input" id = "journal-input" type="text" rows="20" cols="50">
+			<textarea name ="journal-input" id = "journal-input" type="text" rows="16" cols="45">
         </textarea>
 			<input type="image" src="./images/submiticon.png" alt="submit" height="50" width="80"/>
         </div>
@@ -82,6 +85,165 @@
 		<audio id="affirm1" src="./audio/affirm1.mp3"></audio>
 		<!--TODO make history button go to history tag so user does not have to scroll -->
 		<ul id="history"></ul>
+    
+    <script src="server.js"></script>
+    <script src="require.js"></script>
+
+    <!-- Record and Saving Example Found at: 
+    https://github.com/bryanjenningz/record-audio/blob/master/record-server-example/public/index.html -->
+
+    <div id= "audio-tools">
+    <button id="record">Record</button>
+    <button id="stop" disabled>Stop</button>
+    <button id="play" disabled>Play</button>
+    <button id="save" disabled>Submit</button>
+
+    <p id="audio-link"></p>
+    </div>
+
+    <!--
+    <div id="saved-audio-messages">
+      <h2>Saved messages</h2>
+    </div>
+    -->
+
+    <script>
+      const recordAudio = () =>
+        new Promise(async resolve => {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const mediaRecorder = new MediaRecorder(stream);
+          let audioChunks = [];
+
+          mediaRecorder.addEventListener('dataavailable', event => {
+            audioChunks.push(event.data);
+          });
+
+          const start = () => {
+            audioChunks = [];
+            mediaRecorder.start();
+          };
+
+          const stop = () =>
+            new Promise(resolve => {
+              mediaRecorder.addEventListener('stop', () => {
+                const audioBlob = new Blob(audioChunks);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                //const blobDataInMP3Format = new Blob([audioBlob], { type : 'audio/mp3; codecs=0' });
+                //console.log(blobDataInMP3Format);
+                const play = () => audio.play();
+                resolve({ audioChunks, audioBlob, audioUrl, play });
+              });
+
+              mediaRecorder.stop();
+            });
+
+          resolve({ start, stop });
+        });
+
+      const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+      const recordButton = document.querySelector('#record');
+      const stopButton = document.querySelector('#stop');
+      const playButton = document.querySelector('#play');
+      const saveButton = document.querySelector('#save');
+      const savedAudioMessagesContainer = document.querySelector('#saved-audio-messages');
+
+      let recorder;
+      let audio;
+
+      recordButton.addEventListener('click', async () => {
+        recordButton.setAttribute('disabled', true);
+        stopButton.removeAttribute('disabled');
+        playButton.setAttribute('disabled', true);
+        saveButton.setAttribute('disabled', true);
+        if (!recorder) {
+          recorder = await recordAudio();
+        }
+        recorder.start();
+      });
+
+      stopButton.addEventListener('click', async () => {
+        recordButton.removeAttribute('disabled');
+        stopButton.setAttribute('disabled', true);
+        playButton.removeAttribute('disabled');
+        saveButton.removeAttribute('disabled');
+        audio = await recorder.stop();
+      });
+
+      playButton.addEventListener('click', () => {
+        audio.play();
+      });
+      
+      saveButton.addEventListener('click', () => {
+
+        const blobData = new Blob([audio.audioBlob], { type : 'audio/mp3; codecs=0' });
+
+        const audioFile = blobData;
+        const audioUrl = URL.createObjectURL(audioFile);
+
+        const audioLink = document.getElementById("audio-link");
+
+        //audioLink.innerText = audioUrl;
+        const formData = new FormData();
+        formData.append('audio-file', audioFile);
+
+        console.log(audioFile);
+        console.log(audioUrl);
+      });
+
+/**
+        const dataUrl = URL.createObjectURL(blobData);
+        
+       
+        const reader = new FileReader();
+
+        reader.readAsDataURL(audio.audioBlob);
+        reader.onload = () => {
+          const base64AudioMessage = reader.result.split(',')[1];
+
+          fetch('/speech', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: base64AudioMessage })
+          }).then(res => {
+            if (res.status === 201) {
+              return populateAudioMessages();
+            }
+            console.log('Invalid status saving audio message: ' + res.status);
+          });
+        };
+      
+});      
+
+      
+      
+      const populateAudioMessages = () => {
+        return fetch('/speech').then(res => {
+          if (res.status === 200) {
+            return res.json().then(json => {
+              json.messageFilenames.forEach(filename => {
+                let audioElement = document.querySelector(`[data-audio-filename="${filename}"]`);
+                if (!audioElement) {
+                  audioElement = document.createElement('audio');
+                  audioElement.src = `/speech/${filename}`;
+                  audioElement.setAttribute('data-audio-filename', filename);
+                  audioElement.setAttribute('controls', true);
+                  savedAudioMessagesContainer.appendChild(audioElement);
+                }
+              });
+            });
+          }
+          console.log('Invalid status getting messages: ' + res.status);
+        });
+      };
+      
+
+      populateAudioMessages();
+      **/
+
+    </script>
+    
 </body>
 
 </html>

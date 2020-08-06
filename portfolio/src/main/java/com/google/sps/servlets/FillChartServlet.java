@@ -10,6 +10,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.users.User;
@@ -21,7 +23,7 @@ public class FillChartServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("input");
+    Query query = new Query("input").addSort("input", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     ArrayList<String> allProperties = new ArrayList<>();
 
@@ -30,7 +32,7 @@ public class FillChartServlet extends HttpServlet {
         User user = userService.getCurrentUser();
         String userProperty = "";
         String userNickname = user.getNickname();
-
+  
         //Writes properties specific to the current user to /fill-charts to be fetched
         for(Entity entity:results.asIterable()){
             userProperty = (String)entity.getProperty("User");

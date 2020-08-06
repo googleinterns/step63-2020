@@ -12,11 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module.exports = {
-  revealLogin: revealLogin,
-  displayName: displayName
-}
-
 function revealLogin() {
   fetch('/login').then(response => response.json()).then((person) => {
     if(person.status == true){
@@ -35,9 +30,10 @@ function revealLogin() {
 function displayName() {
   fetch('/login').then(response => response.json()).then((person) => {
     if(person.name != null){
+      var place = document.getElementById("name");
       var message = document.createElement("h3");
       message.innerHTML = "HELLO " + person.name + "!";
-      document.getElementById("content").appendChild(message);
+      document.place.appendChild(message);
     }
   });
 }

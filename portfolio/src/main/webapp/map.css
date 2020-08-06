@@ -42,6 +42,7 @@ a{
   overflow: auto; /* Enable scrolling if the sidenav has too much content */
   left: 0;
   font-family: 'Poiret One', cursive;
+  text-shadow: 2px 2px 4px #000000;
 }
  a:link {
     text-decoration: none;
@@ -49,12 +50,66 @@ a{
 
 #resources{
     text-align: center;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px #000000;
+    font-family: 'Spartan', sans-serif;
+    font-size:40px;
+}
+#address-containter{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+#submit-container{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+#therapist-header{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 #address{
     text-align: center;
-    padding-left: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    background: transparent;
+    font-size:40px;
+    color: white;
+    box-sizing: border-box;
+    border: 3px solid rgb(255, 255, 255);
+    border-radius: 5px;
+    text-shadow: 1px 1px 2px #000000;
+    font-family: 'Spartan', sans-serif;
+}
+#resource-list{
+    text-align:center;
+    text-decoration: none;
+    list-style-type: none;
+}
+#map {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+h2 {
+    font-family: 'Spartan', sans-serif;
+    font-size: 70px;
+    text-shadow: 2px 2px 2px #000000;
+}
+input[type=text] {
+  box-sizing: border-box;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4px;
+}
+
+::placeholder {
+   color: white;
+   text-shadow: 1px 1px 2px #000000;
+   font-family: 'Spartan', sans-serif;
 }
 #submit{
-    text-align: center;
-    padding-top: 20%;
+    padding-top: 1%;
 }

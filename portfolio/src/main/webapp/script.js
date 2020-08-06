@@ -15,9 +15,28 @@
 function revealLogin() {
   fetch('/login').then(response => response.json()).then((person) => {
     window.location.replace(person.url);
+    if(person.status == true){
+      window.location.replace(person.url);
+
+      window.alert("LOGOUT SUCCESSFUL!");
+    }else{
+      window.location.replace(person.url);
+
+      displayName();
+    }
+
   });
 }
 
+function displayName() {
+  fetch('/login').then(response => response.json()).then((person) => {
+    if(person.name != null){
+      var message = document.createElement("h3");
+      message.innerHTML = "HELLO " + person.name + "!";
+      document.getElementById("content").appendChild(message);
+    }
+  });
+}
 /*
 var currentTime = new Date().getHours();
 if (currentTime <= 5 | currentTime>20) {
