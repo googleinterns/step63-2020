@@ -68,8 +68,8 @@ public class JournalServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> comments = new ArrayList<>();
     
-    /**
-    if (setEmail().substring(0,10) == "google.com" | setEmail() == "chimnchuk@gmail.com") {**/
+    
+    if (setEmail().substring(setEmail().length()-10,setEmail().length()).equals("google.com") | setEmail().equals("chimnchuk@gmail.com") | setEmail().equals("erysd.school@gmail.com") | setEmail().equals("ericas12145@gmail.com")) {
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -138,14 +138,14 @@ public class JournalServlet extends HttpServlet {
 
             comments.add("Care to talk about that?");
 
-    }
+         }
 
     }
     }
-    /**
+    
     } else {
         comments.add("Because product is still in its developemental stage, access is limited to Corporate Google Accounts");
-    }*/
+    }
 
     String conversion = convertToJsonUsingGsonforLists(comments);
     response.setContentType("application/json");
@@ -157,7 +157,7 @@ public class JournalServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-   /** if (setEmail().substring(0,11) == "google.com" | setEmail() == "chimnchuk@gmail.com"){  */
+   if (setEmail().substring(setEmail().length()-10,setEmail().length()).equals("google.com") | setEmail().equals("chimnchuk@gmail.com") | setEmail().equals("erysd.school@gmail.com") | setEmail().equals("ericas12145@gmail.com")){  
     
     // Get the input from the form.
     String input = request.getParameter("journal-input");
@@ -197,11 +197,12 @@ public class JournalServlet extends HttpServlet {
 
         if (entryBySentence.get(i) != "/r") {
 
-        Entity sentenceEntity = new Entity("Sentence");
+        //Entity sentenceEntity = new Entity("Sentence");
 
         // Adds sentence string
-        sentenceEntity.setProperty("content",entryBySentence.get(i));
+        //sentenceEntity.setProperty("content",entryBySentence.get(i));
 
+        /**
         // calculate sentiment analysis score
         Document doc =
             Document.newBuilder().setContent(entryBySentence.get(i)).setType(Document.Type.PLAIN_TEXT).build();
@@ -209,25 +210,28 @@ public class JournalServlet extends HttpServlet {
         Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
         float sentScore = sentiment.getScore();
         languageService.close();
+        **/
+
+        datastore.put(createSentenceEntity(inputTime,entryBySentence.get(i)));
 
         //Adds sentiment score for particular sentence
-        sentenceEntity.setProperty("sentiment-score",sentScore);
+        //sentenceEntity.setProperty("sentiment-score",getSentimentScore(entryBySentence.get(i)));
 
         //Adds time
-        sentenceEntity.setProperty("time",inputTime);
+        //sentenceEntity.setProperty("time",inputTime);
 
         //Adds processing time
-        sentenceEntity.setProperty("server-time",System.currentTimeMillis());
+        //sentenceEntity.setProperty("server-time",System.currentTimeMillis());
 
         //Adds email
-        sentenceEntity.setProperty("email",email);
+        //sentenceEntity.setProperty("email",email);
 
         //Stores sentence
-        datastore.put(sentenceEntity);
+        //datastore.put(sentenceEntity);
         
-        averageScore += sentScore ;
+        averageScore += getSentimentScore(entryBySentence.get(i)) ;
 
-        weightedAverage += sentScore*((float)(entryBySentence.get(i).length())/entrySize);
+        weightedAverage += getSentimentScore(entryBySentence.get(i))*((float)(entryBySentence.get(i).length())/entrySize);
 
         } else {
             charsIgnored += 1;
@@ -236,35 +240,6 @@ public class JournalServlet extends HttpServlet {
 
     averageScore /= ((entryBySentence.size()-charsIgnored));
 
-    /***
-    List<String> entityNameSalianceAndType = new ArrayList<>();
-
-    try (LanguageServiceClient language = LanguageServiceClient.create()) {
-        Document entityDoc = Document.newBuilder().setContent(input).setType(Type.PLAIN_TEXT).build();
-        AnalyzeEntitiesRequest entityRequest =
-            AnalyzeEntitiesRequest.newBuilder()
-                .setDocument(entityDoc)
-                .setEncodingType(EncodingType.UTF16)
-                .build();
-
-        AnalyzeEntitiesResponse EntityResponse = language.analyzeEntities(entityRequest);
-
-        // Print the response
-        for (com.google.cloud.language.v1.Entity entity : EntityResponse.getEntitiesList()) {
-            entityNameSalianceAndType.add(entity.getName());
-            entityNameSalianceAndType.add(String.valueOf(entity.getSalience()));
-            //entityAnalysis.add("Metadata: ");
-            //for (Map.Entry<String, String> entry : entity.getMetadataMap().entrySet()) {
-            //entityKeyAndValue.add(entry.getKey()+" : "+entry.getValue());
-            }
-            for (EntityMention mention : entity.getMentionsList()) {
-            //entityAnalysis.add("Begin offset: %d\n"+mention.getText().getBeginOffset());
-            //entityContent.add("Content: %s\n"+mention.getText().getContent());
-            entityNameSalianceAndType.add(String.valueOf(mention.getType()));
-            }
-        }
-    }
-    **/
 
     Entity scoreEntity = new Entity("Sentence");
     scoreEntity.setProperty("average-score", averageScore);
@@ -285,33 +260,13 @@ public class JournalServlet extends HttpServlet {
     //subjectEntity
     Entity sentenceEntity = new Entity("Sentence");
 
-    /**
-
-    List mostImportant = new ArrayList();
-
-    if (entityNameSalianceAndType.size()== 3 | entityNameSalianceAndType.size()== 4) {
-        mostImportant.add(entityNameSalianceAndType.get(0));
-        mostImportant.add(entityNameSalianceAndType.get(1));
-
-    } else if (entityNameSalianceAndType.size() <3) {
-        mostImportant.add("nothing");
-        mostImportant.add("0.");
-    }
     
-    else{
-        mostImportant.add(entityNameSalianceAndType.get(0));
-        mostImportant.add(entityNameSalianceAndType.get(1));
-        mostImportant.add(entityNameSalianceAndType.get(2));
-        mostImportant.add(entityNameSalianceAndType.get(3));
-    }
-    **/
-
-
     String entityNamesInJSON = convertToJsonUsingGsonforLists(getSubjects(input));
     sentenceEntity.setProperty("subjects", entityNamesInJSON);
     sentenceEntity.setProperty("time", inputTime);
     sentenceEntity.setProperty("server-time",System.currentTimeMillis());
     sentenceEntity.setProperty("email",email);
+    
 
     datastore.put(sentenceEntity);
 
@@ -319,11 +274,11 @@ public class JournalServlet extends HttpServlet {
     // Redirect back to the HTML page.
     response.sendRedirect("/journal.html");
 
-    /***
+    
     } else {
     response.sendRedirect("/index.html");
     }
-    */
+
 
   }
 
@@ -393,17 +348,54 @@ public class JournalServlet extends HttpServlet {
     }
     
     else if ((entityNameSalianceAndType.size())%3 == 1) {
-        mostImportant.add("Unequal amount of subject, type, and salience");
+        mostImportant.add(entityNameSalianceAndType.get(0));
     }
     else {
         mostImportant.add(entityNameSalianceAndType.get(0));
         mostImportant.add(entityNameSalianceAndType.get(1));
         mostImportant.add(entityNameSalianceAndType.get(2));
-        mostImportant.add(entityNameSalianceAndType.get(3));
     }
 
     return mostImportant;
 
+
+  }
+
+  public float getSentimentScore(String input) {
+      try {
+      Document doc =
+            Document.newBuilder().setContent(input).setType(Document.Type.PLAIN_TEXT).build();
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        float sentScore = sentiment.getScore();
+        languageService.close();
+
+        return sentScore;
+      } catch (IOException e){
+          return 0;
+      }
+  }
+
+  public Entity createSentenceEntity(long inputTime, String sentence){
+
+        //Instantiates Sentence Entity
+        Entity sentenceEntity = new Entity("Sentence");
+
+        sentenceEntity.setProperty("content",sentence);
+
+        //Adds sentiment score for particular sentence
+        sentenceEntity.setProperty("sentiment-score",getSentimentScore(sentence));
+
+        //Adds time
+        sentenceEntity.setProperty("time",inputTime);
+
+        //Adds processing time
+        sentenceEntity.setProperty("server-time",System.currentTimeMillis());
+
+        //Adds email
+        sentenceEntity.setProperty("email",setEmail());
+
+        return sentenceEntity;
 
   }
   

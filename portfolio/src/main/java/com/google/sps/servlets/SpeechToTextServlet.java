@@ -84,9 +84,18 @@ public class SpeechToTextServlet extends HttpServlet {
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Query sentenceQuery = new Query("Sentence").addSort("time", SortDirection.DESCENDING);
-    PreparedQuery sentenceResults = datastore.prepare(sentenceQuery);
+    Query soundQuery = new Query("Sound").addSort("time", SortDirection.DESCENDING);
+    PreparedQuery soundResults = datastore.prepare(soundQuery);
 
+    List<String> message = new ArrayList();
+
+    for (Entity entity : soundResults.asIterable()) {
+        message.add(String.valueOf(entity.getProperty("text")));
+    }
+
+    String conversion = convertToJsonUsingGsonforLists(message);
+    response.setContentType("application/json");
+    response.getWriter().println(conversion);
 
   }
   
@@ -117,12 +126,14 @@ public class SpeechToTextServlet extends HttpServlet {
         **/
 
         // The path to the audio file to transcribe
-        String fileName = "/home/chiamaka/step63-2030/portfolio/src/main/java/com/google/sps/servlets/audio.mp3";
+        String fileName = "./resources/audio.raw";
+
 
         // Reads the audio file into memory
             Path path = Paths.get(fileName);
 
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!"+fileName);
+            System.out.println(path.toAbsolutePath());
 
             byte[] data = Files.readAllBytes(path);
             ByteString audioBytes = ByteString.copyFrom(data);
@@ -152,11 +163,20 @@ public class SpeechToTextServlet extends HttpServlet {
         
         
 
- 
+         
+
+    String fileName = "audio.raw";
+    Path path = Paths.get(fileName);
+    response_text.add(String.valueOf(path.toAbsolutePath()));
+
     // Redirect back to the HTML page.
-    //response.sendRedirect("/journal.html");
-    response.setContentType("text/html;");
-    response.getWriter().println(convertToJsonUsingGsonforLists(response_text));
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity soundEntity = new Entity("Sound");
+    soundEntity.setProperty("time", System.currentTimeMillis());
+    soundEntity.setProperty("text",convertToJsonUsingGsonforLists(response_text));
+    datastore.put(soundEntity);
+
+   response.sendRedirect("/journal.html");
 
   }
 

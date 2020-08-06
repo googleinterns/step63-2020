@@ -68,7 +68,34 @@ public final class JournalServletTest extends HttpServlet {
     Assert.assertEquals("chiamaka@google.com", JournalServlet.setEmail());
   }
   */
+  
 
+  //Can't test this either, only have "end user credentials"
+
+/**
+  @Test
+  public void submissionAndProcessingTimeDifferent(){
+      Entity sentenceEntity = JournalServlet.createSentenceEntity(System.currentTimeMillis(),"string");
+      String clientTime = String.valueOf(sentenceEntity.getProperty("time"));
+      String serverTime = String.valueOf(sentenceEntity.getProperty("server-time"));
+
+      Boolean expected = false;
+      Boolean actual = clientTime.equals(serverTime);
+    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!! expected: "+expected+" actual: "+actual);
+     Assert.assertEquals(expected,actual);
+
+    
+  }
+  */
+
+  //Can't test, only have "end user credentials"
+
+  @Test
+  public void correctSentimentReturn(){
+      float expected = 0;
+
+    //Assert.assertEquals(expected, JournalServlet.getSentimentScore("testing"));
+  }
   @Test
   public void everyEntityHasSalienceScore() {
     
@@ -79,7 +106,7 @@ public final class JournalServletTest extends HttpServlet {
     test.add("string");
 
     List<String> expected = new ArrayList();
-    expected.add("Unequal amount of subject, type, and salience");
+    expected.add("string");
 
     System.out.println(String.valueOf(expected.getClass().getName()));
     //System.out.println(String.valueOf(JournalServlet.getSubjects(test)));
