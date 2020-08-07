@@ -177,5 +177,5 @@ function getDate() {
     var today = String(new Date());
     document.getElementById('time').innerHTML = "•  "+today.slice(0, 10)+"  •";
 }
-window.onload = populateAnalysis;
-window.onload = getDate;
+//window.onload = populateAnalysis;
+//window.onload = getDate;
