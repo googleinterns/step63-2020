@@ -66,6 +66,7 @@ public class JournalServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      
     List<String> comments = new ArrayList<>();
     
     
@@ -87,9 +88,10 @@ public class JournalServlet extends HttpServlet {
     }
     
     List<String> test = new ArrayList<>();
-    String currentEmail = "";
+    String currentEmail = setEmail();
 
     comments.add("NEW ENTRY");
+    /**
     UserService service =  UserServiceFactory.getUserService();
         User user = service.getCurrentUser();
         if (service.isUserLoggedIn()) {
@@ -97,6 +99,7 @@ public class JournalServlet extends HttpServlet {
         } else {
             currentEmail = "no email found";
         }
+    **/
     comments.add(currentEmail);
     
 
@@ -183,51 +186,17 @@ public class JournalServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    //Creates new Sentence Entity
-
     //Iterates over list of sentences and creates sentence object
 
     String email = setEmail();
     
     List<String> wtAvg = new ArrayList<>();
 
-
-
     for (int i= 0; i < entryBySentence.size(); i++) {
 
         if (entryBySentence.get(i) != "/r") {
 
-        //Entity sentenceEntity = new Entity("Sentence");
-
-        // Adds sentence string
-        //sentenceEntity.setProperty("content",entryBySentence.get(i));
-
-        /**
-        // calculate sentiment analysis score
-        Document doc =
-            Document.newBuilder().setContent(entryBySentence.get(i)).setType(Document.Type.PLAIN_TEXT).build();
-        LanguageServiceClient languageService = LanguageServiceClient.create();
-        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-        float sentScore = sentiment.getScore();
-        languageService.close();
-        **/
-
         datastore.put(createSentenceEntity(inputTime,entryBySentence.get(i)));
-
-        //Adds sentiment score for particular sentence
-        //sentenceEntity.setProperty("sentiment-score",getSentimentScore(entryBySentence.get(i)));
-
-        //Adds time
-        //sentenceEntity.setProperty("time",inputTime);
-
-        //Adds processing time
-        //sentenceEntity.setProperty("server-time",System.currentTimeMillis());
-
-        //Adds email
-        //sentenceEntity.setProperty("email",email);
-
-        //Stores sentence
-        //datastore.put(sentenceEntity);
         
         averageScore += getSentimentScore(entryBySentence.get(i)) ;
 
@@ -259,7 +228,6 @@ public class JournalServlet extends HttpServlet {
     
     //subjectEntity
     Entity sentenceEntity = new Entity("Sentence");
-
     
     String entityNamesInJSON = convertToJsonUsingGsonforLists(getSubjects(input));
     sentenceEntity.setProperty("subjects", entityNamesInJSON);
@@ -340,7 +308,7 @@ public class JournalServlet extends HttpServlet {
     
     List<String> entityNameSalianceAndType = getEntityAnalysis(inputString);
 
-    List mostImportant = new ArrayList();
+    List<String> mostImportant = new ArrayList();
 
     if (entityNameSalianceAndType.size() <3) {
         mostImportant.add("nothing");

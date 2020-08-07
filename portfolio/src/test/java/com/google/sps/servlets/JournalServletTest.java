@@ -70,9 +70,11 @@ public final class JournalServletTest extends HttpServlet {
   */
   
 
-  //Can't test this either, only have "end user credentials"
+//Can't test this either, only have "end user credentials" for creating datastore entities
+
 
 /**
+
   @Test
   public void submissionAndProcessingTimeDifferent(){
       Entity sentenceEntity = JournalServlet.createSentenceEntity(System.currentTimeMillis(),"string");
@@ -81,14 +83,14 @@ public final class JournalServletTest extends HttpServlet {
 
       Boolean expected = false;
       Boolean actual = clientTime.equals(serverTime);
-    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!! expected: "+expected+" actual: "+actual);
-     Assert.assertEquals(expected,actual);
+      System.out.println("!!!!!!!!!!!!!!!!!!!!!!!! expected: "+expected+" actual: "+actual);
+      Assert.assertEquals(expected,actual);
 
     
   }
   */
 
-  //Can't test, only have "end user credentials"
+  //Can't test, only have "end user credentials" for Sentiment analysis
 
   @Test
   public void correctSentimentReturn(){
@@ -96,23 +98,18 @@ public final class JournalServletTest extends HttpServlet {
 
     //Assert.assertEquals(expected, JournalServlet.getSentimentScore("testing"));
   }
+
+//Can't test getSubjects() calls Entity Analysis API
+
   @Test
   public void everyEntityHasSalienceScore() {
     
-    List<String> test = new ArrayList();
-    test.add("string");
-    test.add("0.0");
-    test.add("string");
-    test.add("string");
+    String test = "testing";
 
     List<String> expected = new ArrayList();
     expected.add("string");
 
-    System.out.println(String.valueOf(expected.getClass().getName()));
-    //System.out.println(String.valueOf(JournalServlet.getSubjects(test)));
-
-
-    //Assert.assertEquals(expected, JournalServlet.getSubjects(test));
+    //Assert.assertArrayEquals(expected, JournalServlet.getSubjects(test));
   }
 
   @Test
