@@ -50,13 +50,13 @@ public class ChartServlet extends HttpServlet {
     int entityCount = replaceResults.countEntities();
     if(entityCount!= 0){
         try{
+            
             String whichQuestion ="";
             String propertyName = (String)request.getParameter("name");
             for(Entity entity:replaceResults.asIterable()){
                 Key oldKey = entity.getKey();
                 Entity oldEntity = datastore.get(oldKey);
-                String data = (String)oldEntity.getProperty("input");
-                String[] previousProperties = data.split(",");
+                String[] previousProperties = getOldProperties(oldEntity);
                 whichQuestion = previousProperties[2];
                 userProperty =(String)entity.getProperty("User");
 
@@ -64,7 +64,7 @@ public class ChartServlet extends HttpServlet {
                 if(whichQuestion.contains(propertyName) && previousProperties[0].contains(currentDate)
                     && userNickname.equals(userProperty)){
 
-                    datastore.delete(oldKey);
+                    datastore.delete(entity.getKey());
                 }
 
             }
@@ -79,7 +79,7 @@ public class ChartServlet extends HttpServlet {
 
   }
 
-  public static Entity addProperties(String currentDate, HttpServletRequest request, String userNickname){
+  public Entity addProperties(String currentDate, HttpServletRequest request, String userNickname){
     //Adds day, value, and question to arraylist
     List<String> properties = new ArrayList<>();
     properties.add(currentDate);
@@ -92,5 +92,11 @@ public class ChartServlet extends HttpServlet {
     input.setProperty("input", g.toJson(properties));
     input.setProperty("User", userNickname);
     return input;
+  }
+
+  public String[] getOldProperties(Entity oldEntity){
+        String data = (String)oldEntity.getProperty("input");
+        String[] previousProperties = data.split(",");
+        return previousProperties;
   }
 }

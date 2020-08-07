@@ -26,27 +26,16 @@ var monthChart = [ ["Day", "Mood"], ["2020-07-02", "1", "Q1"], ["2020-07-03", "1
 
 var oneEntry = [["2020-07-24", "1", "Q2"]];
 
+var unprepared = [["2020-07-25", "1", "Q1"], ["2020-07-26", "1", "Q1"], ["2020-07-27", "1", "Q1"],
+                 ["2020-07-28", "1", "Q1"], ["2020-07-29", "1", "Q1"], ["2020-07-30", "1", "Q1"], ["2020-07-31", "1", "Q1"]  ];
 
-/*
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function(){
-      assert.equal(-1, [1,2,3].indexOf(4));
-    });
-  });
-});
+var prepared = [["Day", "Mood"], ["2020-07-25", "1"], ["2020-07-26", "1"], ["2020-07-27", "1"],
+                 ["2020-07-28", "1"], ["2020-07-29", "1"], ["2020-07-30", "1"], ["2020-07-31", "1"]];
 
-describe('Math', function() {
-  describe('math1', function() {
-    it('should equal 9', function(){
-      assert.equal(9, 3*3);
-    });
-    it('should equal -8', function(){
-      assert.equal(-8, (3 - 4)*8);
-    });
-  });
-});
-*/
+
+
+
+
 
 describe('Sort', function() {
   describe('day sort', function() {
@@ -72,6 +61,14 @@ describe('Edit by week or month', function() {
     });
     it('should return the same array of 7 entries', function(){
       assert.deepEqual(weekChart, charts.weekMonthFormat(weekChart, "month"));
+    });
+  });
+});
+
+describe('finalPrep', function() {
+  describe('finalPrep', function() {
+    it('should return an array prepared to go to charts', function(){
+      assert.deepEqual(prepared, charts.finalPrep(unprepared));
     });
   });
 });

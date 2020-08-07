@@ -1,6 +1,6 @@
 
 google.charts.load('current', {'packages':['corechart']});
-//var module = {};
+
 module.exports = {
     sortArray: sortArray,
     finalPrep: finalPrep,
@@ -87,6 +87,7 @@ function finalPrep(arr){
         arr[i][1] = parseInt(arr[i][1]);
     }
     arr.unshift(["Day", "Mood"]);
+    return arr;
 }
 
 function noData(id){
@@ -123,8 +124,8 @@ function inputData(properties, type){
 
         Q1Array = sortArray(Q1Array);
         Q2Array = sortArray(Q2Array);
-        finalPrep(Q1Array);
-        finalPrep(Q2Array);
+        Q1Array = finalPrep(Q1Array);
+        Q2Array = finalPrep(Q2Array);
         
         Q1Array =weekMonthFormat(Q1Array,type);
         Q2Array =weekMonthFormat(Q2Array,type);
