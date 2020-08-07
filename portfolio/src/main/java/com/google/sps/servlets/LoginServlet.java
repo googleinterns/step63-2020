@@ -34,6 +34,9 @@ public class LoginServlet extends HttpServlet {
     Boolean status;
     UserService userService = UserServiceFactory.getUserService();
 
+    //limit emails to just @google.com. logout them out and redirect to homepage, 
+    //make a string and check
+
     // If user is not logged in, show a login form (could also redirect to a login page
     if (!userService.isUserLoggedIn()) {
       String loginUrl = userService.createLoginURL("/nickname.html");
@@ -43,6 +46,19 @@ public class LoginServlet extends HttpServlet {
 
       String statusJson = new Gson().toJson(person);
       response.getWriter().println(statusJson);
+
+      System.out.println(statusJson);
+
+      return;
+    }
+
+    String email = userService.getCurrentUser().getEmail();
+    String end = email.substring(email.length() - 11);
+    String logoutUrl = userService.createLogoutURL("/");
+    System.out.println(end);
+
+    if(!end.equals("@google.com")){
+      response.sendRedirect(logoutUrl);
       return;
     }
 
@@ -53,18 +69,8 @@ public class LoginServlet extends HttpServlet {
       return;
     }
 
-    // User is logged in and has a nickname, so the request can proceed
-    // if(userService.isUserLoggedIn()) {
-    String logoutUrl = userService.createLogoutURL("/");
-    String email = userService.getCurrentUser().getEmail();
-    String end = email.substring(email.length() - 11);
-    System.out.println(end);
-
-    if(!end.equals("@google.com")){
-      response.sendRedirect(logoutUrl);
-      return;
-    }
-    
+    // User is logged in and has a nickname, so the request can proceed   
+    // String logoutUrl = userService.createLogoutURL("/");
     status = true;
     
     person.addProperty("url", logoutUrl);
@@ -76,10 +82,6 @@ public class LoginServlet extends HttpServlet {
     response.getWriter().println(statusJson);
 
     System.out.println(statusJson);
-  // }
-
-  // response.sendRedirect("/index.html");
-  // return;
   }
 
   /** Returns the nickname of the user with id, or null if the user has not set a nickname. */

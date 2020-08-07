@@ -14,6 +14,7 @@
 
 function revealLogin() {
   fetch('/login').then(response => response.json()).then((person) => {
+    window.location.replace(person.url);
     if(person.status == true){
       window.location.replace(person.url);
 
