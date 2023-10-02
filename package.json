@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/googleinterns/step63-2020#readme",
   "dependencies": {
-    "mocha": "^8.0.1",
+    "mocha": "^8.4.0",
     "sinon": "^9.0.2"
   }
 }
